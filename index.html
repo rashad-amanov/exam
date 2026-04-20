@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>Bulud Texnologiyaları - Taymerli və Serverli İmtahan</title>
+    <style>
+        :root { --primary: #2563eb; --secondary: #f59e0b; --success: #10b981; --danger: #ef4444; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 900px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .screen { display: none; }
+        .active { display: block; }
+        #timer-box { font-size: 24px; font-weight: bold; padding: 10px 20px; border-radius: 8px; background: #e2e8f0; text-align: center; }
+        .timer-warning { color: var(--danger); animation: pulse 1s infinite; background: #fee2e2 !important; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .admin-panel { background: #fee2e2; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed var(--danger); }
+        .nav-panel { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-bottom: 20px; }
+        .nav-item { padding: 10px; border: 1px solid #ddd; text-align: center; cursor: pointer; border-radius: 4px; }
+        .nav-item.active { background: var(--primary); color: white; }
+        .nav-item.answered { background: var(--success); color: white; }
+        .option { background: #f1f5f9; border: 2px solid #e2e8f0; padding: 15px; margin-bottom: 10px; border-radius: 10px; cursor: pointer; }
+        .option.selected { background: #dbeafe; border-color: var(--primary); }
+        .stats-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px; background: #f1f5f9; border-radius: 8px; }
+        button { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-main { background: var(--primary); color: white; width: 100%; margin-top: 15px; }
+        .btn-finish { background: var(--danger); color: white; width: 100%; margin-top: 20px; }
+        .btn-skip { background: var(--secondary); color: white; width: 100%; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="setup-screen" class="screen active">
+        <h2 style="text-align:center">Bulud Texnologiyaları İmtahanı</h2>
+        
+        <div id="admin-zone" class="admin-panel" style="display:none;">
+            <strong>Müəllim Paneli:</strong><br><br>
+            Sualları Yenilə (.txt): <input type="file" id="fileInput" accept=".txt">
+            <button onclick="uploadQuestions()" style="background:var(--success); color:white; padding:5px 10px;">Yüklə</button>
+            <button style="background:var(--danger); color:white; padding:5px 10px; margin-left:10px;" onclick="clearLeaderboard()">Cədvəli Sıfırla</button>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <label>Tələbənin Adı və Soyadı:</label>
+            <input type="text" id="username" style="width:100%; padding:12px; margin-top:8px; border:1px solid #ddd; border-radius:8px;">
+            <button class="btn-main" onclick="startExam()">İmtahana Başla (5 dəqiqə)</button>
+        </div>
+
+        <h3>Liderlər Cədvəli (Yerli)</h3>
+        <table>
+            <thead><tr><th>Tələbə</th><th>Bal</th></tr></thead>
+            <tbody id="leaderboardBody"></tbody>
+        </table>
+        <center><small style="cursor:pointer; color:#ccc; margin-top:20px; display:block;" onclick="toggleAdmin()">⚙ Admin</small></center>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <div class="stats-bar">
+            <div>
+                <div id="s-name" style="font-size: 18px; color: var(--primary);"></div>
+                <div style="font-size: 12px; color: #666;">Haqq: <span id="s-skips">5</span> | Proqress: <span id="s-progress">0/20</span></div>
+            </div>
+            <div id="timer-box">05:00</div>
+        </div>
+        <div class="nav-panel" id="navPanel"></div>
+        <div id="question-area">
+            <h3 id="q-text"></h3>
+            <div id="options-box"></div>
+        </div>
+        <div style="display:flex; margin-top:20px; gap: 10px;">
+            <button style="flex:1; background:#64748b; color:white;" onclick="prevQ()">Geri</button>
+            <button style="flex:1; background:#64748b; color:white;" onclick="nextQ()">İrəli</button>
+        </div>
+        <button id="skipBtn" class="btn-skip" style="margin-top:10px;" onclick="swapQuestion()">Sualı Dəyiş</button>
+        <button class="btn-finish" onclick="confirmFinish()">İmtahanı Bitir</button>
+    </div>
+</div>
+
+<script>
+    // --- SERVER AYARLARI ---
+    // Google Apps Script-dən aldığınız linki aşağıdakı dırnaqların arasına yapışdırın:
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjjUa8gYm_a9Ii47bi1YcT1FZm02J-YRY0EFGc3lwBlzXITxuEYvyYJTmgfEo2Mic/exec'; 
+
+    let masterQuestions = JSON.parse(localStorage.getItem('master_questions') || "[]");
+    let examQuestions = [], answers = {}, currentIndex = 0, skipsLeft = 5, timerInterval, timeLeft = 300;
+
+    function saveScore(name, score) {
+        // 1. Yerli yaddaşa yazır (Leaderboard üçün)
+        let lb = JSON.parse(localStorage.getItem('exam_lb') || "[]");
+        lb.push({ name, score });
+        lb.sort((a, b) => b.score - a.score);
+        localStorage.setItem('exam_lb', JSON.stringify(lb.slice(0, 15)));
+
+        // 2. SERVERƏ (Google Sheets) GÖNDƏRİR
+        if(SCRIPT_URL && SCRIPT_URL !== 'BURAYA_KOPYALADIGINIZ_URL_YAZIN') {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                body: JSON.stringify({ name: name, score: score })
+            }).then(() => console.log("Məlumat Google Sheets-ə göndərildi."));
+        }
+    }
+
+    // --- DİGƏR FUNKSİYALAR (Dəyişməyib) ---
+    function toggleAdmin() { document.getElementById('admin-zone').style.display = (document.getElementById('admin-zone').style.display==='none'?'block':'none'); }
+    function clearLeaderboard() { if(confirm("Cədvəl silinsin?")){ localStorage.removeItem('exam_lb'); loadLeaderboard(); } }
+    
+    function uploadQuestions() {
+        const file = document.getElementById('fileInput').files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const blocks = e.target.result.trim().split(/\n\s*\n/);
+            const parsed = blocks.map(block => {
+                const lines = block.split('\n').map(l => l.trim());
+                const qText = lines[0];
+                const ansLine = lines.find(l => l.toUpperCase().startsWith("ANSWER:"));
+                const correctLetter = ansLine.split(":")[1].trim().toUpperCase();
+                const options = lines.filter(l => /^[A-E]\./.test(l)).map(l => ({
+                    text: l.substring(2).trim(),
+                    isCorrect: l[0].toUpperCase() === correctLetter
+                }));
+                return { qText, options };
+            });
+            localStorage.setItem('master_questions', JSON.stringify(parsed));
+            alert("Suallar yükləndi!"); location.reload();
+        };
+        reader.readAsText(file);
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const min = Math.floor(timeLeft/60), sec = timeLeft%60;
+            const display = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+            document.getElementById('timer-box').innerText = display;
+            if(timeLeft <= 30) document.getElementById('timer-box').classList.add('timer-warning');
+            if(timeLeft <= 0) { clearInterval(timerInterval); confirmFinish(true); }
+        }, 1000);
+    }
+
+    function startExam() {
+        const name = document.getElementById('username').value.trim();
+        if(!name || masterQuestions.length < 20) return alert("Ad yazın və ya bazada kifayət qədər sual olduğundan əmin olun!");
+        document.getElementById('s-name').innerText = name;
+        examQuestions = [...masterQuestions].sort(() => Math.random() - 0.5).slice(0, 20);
+        examQuestions.forEach(q => q.options.sort(() => Math.random() - 0.5));
+        startTimer(); showScreen('quiz-screen'); renderExam();
+    }
+
+    function renderExam() {
+        const q = examQuestions[currentIndex];
+        document.getElementById('q-text').innerText = (currentIndex + 1) + ". " + q.qText;
+        const box = document.getElementById('options-box'); box.innerHTML = "";
+        q.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option' + (answers[currentIndex] === opt.text ? ' selected' : '');
+            div.innerText = opt.text;
+            div.onclick = () => { answers[currentIndex] = opt.text; updateUI(); renderExam(); };
+            box.appendChild(div);
+        });
+        updateUI();
+    }
+
+    function updateUI() {
+        const nav = document.getElementById('navPanel'); nav.innerHTML = "";
+        for(let i=0; i<20; i++) {
+            const div = document.createElement('div');
+            div.className = 'nav-item' + (currentIndex === i ? ' active' : '') + (answers[i] ? ' answered' : '');
+            div.innerText = i + 1;
+            div.onclick = () => { currentIndex = i; renderExam(); };
+            nav.appendChild(div);
+        }
+        document.getElementById('s-progress').innerText = `${Object.keys(answers).length}/20`;
+        document.getElementById('s-skips').innerText = skipsLeft;
+    }
+
+    function swapQuestion() {
+        if(skipsLeft > 0) {
+            const used = examQuestions.map(q => q.qText);
+            const avail = masterQuestions.filter(q => !used.includes(q.qText));
+            if(avail.length > 0) {
+                examQuestions[currentIndex] = avail[Math.floor(Math.random()*avail.length)];
+                examQuestions[currentIndex].options.sort(() => Math.random() - 0.5);
+                delete answers[currentIndex]; skipsLeft--; renderExam();
+            }
+        }
+    }
+
+    function nextQ() { if(currentIndex < 19) { currentIndex++; renderExam(); } }
+    function prevQ() { if(currentIndex > 0) { currentIndex--; renderExam(); } }
+
+    function confirmFinish(auto = false) {
+        if(!auto && !confirm("İmtahanı bitirirsiniz?")) return;
+        clearInterval(timerInterval);
+        let score = 0;
+        examQuestions.forEach((q, i) => { if(answers[i] === q.options.find(o => o.isCorrect).text) score += 0.5; });
+        saveScore(document.getElementById('s-name').innerText, score);
+        alert("Bitdi! Balınız: " + score); location.reload();
+    }
+
+    function loadLeaderboard() {
+        const lb = JSON.parse(localStorage.getItem('exam_lb') || "[]");
+        document.getElementById('leaderboardBody').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.score}</td></tr>`).join('') || '<tr><td colspan="2">Nəticə yoxdur</td></tr>';
+    }
+
+    function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    loadLeaderboard();
+</script>
+
+</body>
+</html>
