@@ -78,136 +78,1979 @@
 </div>
 
 <script>
-    // --- SERVER AYARLARI ---
-    // Google Apps Script-dən aldığınız linki aşağıdakı dırnaqların arasına yapışdırın:
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjjUa8gYm_a9Ii47bi1YcT1FZm02J-YRY0EFGc3lwBlzXITxuEYvyYJTmgfEo2Mic/exec'; 
+    // --- 1. SERVER URL (Google Sheets) ---
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjjUa8gYm_a9Ii47bi1YcT1FZm02J-YRY0EFGc3lwBlzXITxuEYvyYJTmgfEo2Mic/exec''; 
 
-    let masterQuestions = JSON.parse(localStorage.getItem('master_questions') || "[]");
+    // --- 2. AIKEN SUALLARINIZI BURAYA YAPIŞDIRIN ---
+    // Diqqət: Sualları ` ` işarələri (backtick) arasında saxlayın.
+    const AIKEN_DATA = `
+Bulud hesablamalarının tarixi inkişafında "Grid Computing" modelinin əsas rolu nədən ibarətdir?
+A. İstifadəçilərin yalnız fərdi kompüterlərdən istifadəsinə şərait yaratmaq
+B. Resursların mərkəzləşdirilmiş qaydada yalnız bir ofis daxilində paylanması
+C. Coğrafi paylanmış resursların vahid superkompüter kimi istifadə edilməsi
+D. İnternet şəbəkəsinin yalnız məlumat ötürülməsi üçün tətbiq olunması
+ANSWER: C
+
+NIST modelinə görə bulud hesablamalarının rəsmi tərifi hansı əsas amili vurğulayır?
+A. Şəbəkə resurslarına minimum konfiqurasiya ilə rahat girişin təmini
+B. Avadanlıqların yalnız fiziki olaraq müəssisə daxilində yerləşməsi
+C. İstifadəçinin provayderlə hər dəfə şifahi razılığa gəlməsinin vacibliyi
+D. İnternet xidmətlərinin yalnız ödənişli əsaslarla tətbiq edilməsi
+ANSWER: A
+
+"Distributed Computing" (Paylanmış hesablamalar) sistemlərinin təməl fəlsəfəsi nədir?
+A. Böyük bir hesablama tapşırığını bir neçə müstəqil düyün arasında bölmək
+B. Bütün proqram təminatlarını yalnız bir əməliyyat sistemi daxilində sıxmaq
+C. İnternet bağlantısı olmadan məlumatların lokal diskdə arxivləşdirilməsi
+D. Prosessorun daxili keş yaddaşını proqram vasitəsilə süni şəkildə artırmaq
+ANSWER: A
+
+Bulud texnologiyalarından əvvəl istifadə olunan Mainframe sistemlərin əsas çatışmazlığı nə idi?
+A. Hesablama gücünün müasir fərdi kompüterlərdən çox aşağı olması faktı
+B. Resursların istifadəçilər arasında dinamik və avtomatik paylana bilməməsi
+C. Şəbəkə təhlükəsizliyi qaydalarının bu sistemlərdə ümumiyyətlə olmaması
+D. Avadanlıqların ölçüsünün kiçik olması səbəbindən yaddaşın tez dolması
+ANSWER: B
+
+Bulud texnologiyasının "Utility Computing" konsepti ilə oxşarlığı hansı bənddə düzgün verilib?
+A. İstifadə edilən resursların su və ya elektrik enerjisi kimi ödənilməsi
+B. Avadanlıqların mülkiyyət hüququnun mütləq şəkildə müştəriyə keçməsi
+C. Xidmətlərin yalnız dövlət tərəfindən idarə olunan şəbəkədə qurulması
+D. Bütün hesablama proseslərinin yalnız ofis daxilində icra edilməsi
+ANSWER: A
+
+NIST tərifinə görə, buludun "On-demand self-service" xüsusiyyəti nəyi ləğv edir?
+A. İstifadəçinin provayderlə mütləq insan interaksiyasına girmək ehtiyacını
+B. Məlumatların ehtiyat nüsxəsinin (backup) gündəlik çıxarılması zərurətini
+C. İnternet sürətinin provayder tərəfindən limitlənməsi texniki tələbini
+D. Prosessorların texniki göstəricilərinin müştəri tərəfindən bilinməsini
+ANSWER: A
+
+Grid və Cloud texnologiyaları arasındakı fundamental fərq hansı bənddə təsvir olunub?
+A. Grid daha çox elmi hesablamalara, Cloud isə biznes xidmətlərinə yönəlib
+B. Grid texnologiyası yalnız simsiz şəbəkələr üzərində işləmək üçün qurulub
+C. Cloud sistemlərində resursların virtualizasiya olunması mütləq deyil
+D. Grid sistemləri Cloud-dan fərqli olaraq yalnız bir serverdən ibarətdir
+ANSWER: A
+
+Bulud hesablamalarının iqtisadi cəhətdən ən böyük üstünlüyü hansı variantda qeyd olunub?
+A. Şirkətlərin ilkin kapital xərclərini (CapEx) əməliyyat xərclərinə çevirməsi
+B. Bütün proqramların ömürlük lisenziyalarının bir dəfəyə alınması ehtiyacı
+C. İnternet xərclərinin bulud provayderi tərəfindən tam qarşılanması öhdəliyi
+D. Avadanlıqların təmiri üçün mütləq xüsusi texniki heyətin saxlanılması
+ANSWER: A
+
+Aşağıdakılardan hansı buludun "Broad Network Access" xüsusiyyətini ən yaxşı izah edir?
+A. Xidmətlərin müxtəlif cihazlar və standart şəbəkə protokolları ilə əlçatanlığı
+B. Şəbəkəyə girişin yalnız şirkətin daxili kabel sistemi ilə mümkün olması
+C. İnternet provayderinin müştəriyə yalnız bir növ qoşulma kanalı verməsi
+D. İstifadəçilərin eyni vaxtda yalnız bir cihazdan sistemə daxil ola bilməsi
+ANSWER: A
+
+"Resource Pooling" prinsipinin provayder üçün əsas texniki faydası nədən ibarətdir?
+A. Fiziki resursların bir neçə müştəri arasında dinamik şəkildə bölüşdürülməsi
+B. Hər bir müştəri üçün ayrı və müstəqil fiziki server otağının ayrılması işi
+C. Məlumatların saxlanılması üçün yalnız bir növ diskdən istifadə edilməsi
+D. Prosessorun bütün gücünün yalnız bir tətbiqə tam şəkildə həsr olunması
+ANSWER: A
+
+Buludun tarixi inkişafında virtualizasiya texnologiyasının rolu necə qiymətləndirilir?
+A. Fiziki avadanlıqdan maksimum səmərəli istifadəni təmin edən təməl faktor
+B. Şəbəkə sürətini süni şəkildə artırmaq üçün istifadə edilən köməkçi vasitə
+C. Yalnız proqram təminatının dizaynını dəyişmək üçün nəzərdə tutulan alət
+D. Məlumatların arxivləşdirilməsi üçün istifadə olunan daxili texniki kod
+ANSWER: A
+
+NIST-ə görə buludun "Measured Service" xüsusiyyəti hansı mexanizmi təmin edir?
+A. İstifadə olunan resursların şəffaf monitorinqini və hesabatlılıq sistemini
+B. İnternet kanalının genişliyinin yalnız provayder tərəfindən gizli saxlanmasını
+C. Prosessorun temperaturunun hər dəqiqə istifadəçiyə bildiriş kimi göndərilməsini
+D. Aylıq abunə haqqının istifadədən asılı olmayaraq həmişə eyni qalması işini
+ANSWER: A
+
+Real istifadə ssenarisi olaraq, bir startapın buludu seçməsinin ən mühüm səbəbi nədir?
+A. Bazara çıxış sürətini (time-to-market) artırmaq və riskləri minimuma endirmək
+B. Server avadanlıqlarının fiziki mülkiyyətinə dərhal sahib olmaq istəyi
+C. Şirkətin ofisindəki elektrik sərfiyyatını süni şəkildə artırmaq məqsədi
+D. Bütün işçilərin yalnız eyni marka kompüterlərdən istifadə etmək məcburiyyəti
+ANSWER: A
+
+Paylanmış sistemlərdə (Distributed Systems) "Transparency" anlayışı nəyi ifadə edir?
+A. İstifadəçinin resursların harada yerləşməsini bilmədən vahid sistem kimi görməsi
+B. Bütün proqram kodlarının internetdə hər kəs üçün açıq şəkildə yayımlanması
+C. Şəbəkə kabellərinin fiziki olaraq şəffaf materialdan hazırlanması texnikası
+D. Server otağındakı kameraların bütün gün canlı yayımlanması tələbi işi
+ANSWER: A
+
+Buludun "Rapid Elasticity" xüsusiyyəti biznesə hansı üstünlüyü qazandırır?
+A. Ani tələb artımı zamanı resursların avtomatik olaraq dərhal genişlənməsini
+B. Şirkətin internet sürətinin hər ay mütləq şəkildə iki dəfə artırılması vədini
+C. İstifadəçi şifrələrinin hər həftə sonu sistem tərəfindən dəyişdirilməsi imkanını
+D. Serverlərin yerləşdiyi binaların zəlzələyə qarşı elastik materialdan qurulmasını
+ANSWER: A
+
+Tarixi baxımdan "SaaS" modelinin ilk nümunələri hansı xidmət növü ilə bağlıdır?
+A. ASP (Application Service Provider) tərəfindən təklif olunan uzaqdan giriş
+B. Kompüterlərin daxili hissələrinin uzaqdan təmiri üçün nəzərdə tutulan proqram
+C. Şəbəkə kabellərinin rəqəmsal formatda simulyasiya edilməsi prosesi işi
+D. Monitorların parlaqlığını internet üzərindən idarə edən mərkəzi sistem
+ANSWER: A
+
+Thomas Erl-ə görə buludun "Multi-tenancy" xüsusiyyəti nə deməkdir?
+A. Bir neçə istifadəçinin eyni proqram instansiyasından birgə istifadə etməsi
+B. Bir istifadəçinin eyni vaxtda bir neçə müxtəlif bulud provayderi ilə işləməsi
+C. Serverlərin yalnız tələbələr tərəfindən təcrübə məqsədilə idarə olunması
+D. Məlumatların yalnız bir fiziki disk daxilində şifrəsiz şəkildə saxlanması
+ANSWER: A
+
+"Pervasive Computing" anlayışının buludla əlaqəsi hansı variantda düzgün verilib?
+A. İnternetə qoşulan cihazların hər yerdə olması və buluda bağlılığı
+B. Kompüterlərin yalnız bir mərkəzi laboratoriya daxilində işləməsi
+C. Bulud xidmətlərinin yalnız inkişaf etmiş ölkələrdə fəaliyyət göstərməsi
+D. Şəbəkə təhlükəsizliyinin yalnız bir antivirus proqramı ilə təmin olunması
+ANSWER: A
+
+"Time-sharing" konsepti bulud texnologiyalarına necə təsir göstərmişdir?
+A. Çoxlu istifadəçinin eyni resursdan eyni vaxtda yararlanma imkanını yaratdı
+B. İnternet sürətinin yalnız gecə saatlarında artırılması qaydasını gətirdi
+C. Prosessorun işləmə müddətinin yalnız saniyəölçənlə ölçülməsi tələbini qoydu
+D. İşçilərin işə gəlmə saatlarının bulud tərəfindən qeydə alınmasını təmin etdi
+ANSWER: A
+
+Buludun "Service-Oriented Architecture" (SOA) ilə əlaqəsi nədən ibarətdir?
+A. Xidmətlərin təkrar istifadə edilə bilən müstəqil komponentlər kimi qurulması
+B. Şirkət rəhbərliyinin yalnız bir növ xidmətdən istifadə etmək məcburi qərarı
+C. Şəbəkə təhlükəsizlik divarlarının (firewall) fiziki olaraq ləğv edilməsi işi
+D. Bütün bulud xidmətlərinin yalnız eyni proqramlaşdırma dilində yazılması
+ANSWER: A
+
+Sosinsky-ə görə buludda "Scalability" (Miqyaslılıq) nəyi ifadə edir?
+A. Artan yükü qarşılamaq üçün sistemin öz imkanlarını artırmaq qabiliyyətini
+B. Serverlərin fiziki ölçüsünün xüsusi alətlərlə böyüdülməsi prosesini işi
+C. Şəbəkəyə qoşulan cihazların markasının mütləq sistemə uyğun olması tələbi
+D. İstifadəçilərin sayını hər il mütləq şəkildə sabit saxlamaq üçün görülən iş
+ANSWER: A
+
+Bulud infrastrukturunda "Abstraction" (Mücərrədləşdirmə) nə üçün lazımdır?
+A. İstifadəçini aşağı səviyyəli texniki mürəkkəbliklərdən tam azad etmək üçün
+B. Məlumatların daxili strukturunun hər kəs tərəfindən asanlıqla oxunması üçün
+C. Serverlərin yerləşdiyi yerin koordinatlarını hər bir müştəriyə gizli bildirmək
+D. Proqram təminatının interfeysindəki rəngləri daha şəffaf və sadə etmək
+ANSWER: A
+
+"Vendor Lock-in" problemi bulud sənayesində nəyi ifadə edir?
+A. Müştərinin bir provayderin texnologiyasından digərinə keçməkdə çətinliyi
+B. Mağazada satılan bulud avadanlıqlarının qutularının qıfıllanması vəziyyəti
+C. Provayderin öz işçilərini ofis daxilində məcburi şəkildə saxlaması halı
+D. İnternet sürətinin yalnız bir ölkə tərəfindən tam nəzarətdə saxlanması
+ANSWER: A
+
+Buludun tətbiq sahələrindən olan "Disaster Recovery" ssenarisi nəyi nəzərdə tutur?
+A. Qəza zamanı məlumatların və xidmətlərin dərhal bərpa edilməsini
+B. Şirkətin yalnız sığorta sənədlərinin buludda rəqəmsal arxivləşdirilməsini
+C. Kompüterin monitoru qırılan zaman onun avtomatik yenisi ilə əvəzlənməsini
+D. Təbii fəlakət zamanı serverlərin yerinin işçilər tərəfindən əllə dəyişməsini
+ANSWER: A
+
+NIST modelində qeyd olunan "Resource Pooling" xüsusiyyəti hansı resurslara aiddir?
+A. Şəbəkə, server, yaddaş, tətbiq və servis kimi bütün virtual resurslara
+B. Yalnız ofis daxilindəki mebellərin və dəftərxana ləvazimatlarının siyahısına
+C. Şirkətin bank hesabındakı pul vəsaitlərinin bulud üzərindən idarəsinə
+D. İşçilərin şəxsi telefonlarının yaddaş kartlarında olan fotoşəkil bazasına
+ANSWER: A
+
+Buludun "On-demand self-service" xüsusiyyəti praktiki olaraq nəyi ifadə edir?
+A. İstifadəçinin provayderlə insan təması olmadan resursları idarə etməsini
+B. Şəbəkə sürətinin yalnız provayderin texniki heyəti tərəfindən artırılmasını
+C. Bütün bulud xidmətlərinin yalnız iş günlərində və saatlarında aktiv olmasını
+D. Resursların alınması üçün mütləq yazılı müraciət formasının tələb edilməsini
+ANSWER: A
+
+"Broad network access" prinsipi bulud istifadəçisinə hansı imkanı yaradır?
+A. Müxtəlif cihazlarla standart mexanizmlər üzərindən şəbəkəyə daxil olmağı
+B. Şəbəkə resurslarının yalnız bir coğrafi bina daxilində məhdudlaşdırılmasını
+C. İnternetə qoşulma xərclərinin tamamilə provayder tərəfindən ödənilməsi işini
+D. Yalnız bir növ əməliyyat sistemi vasitəsilə mərkəzi serverə qoşulma qaydasını
+ANSWER: A
+
+"Resource pooling" xüsusiyyətinin əsas texniki mahiyyəti nədən ibarətdir?
+A. Fiziki resursların bir neçə müştəri arasında dinamik şəkildə bölünməsindən
+B. Hər bir müştəri üçün ayrıca və müstəqil fiziki server avadanlığının alınmasından
+C. Məlumatların saxlanılması üçün yalnız bir növ disk texnologiyasından istifadədən
+D. Prosessorun bütün gücünün yalnız bir istifadəçiyə tam şəkildə həsr olunmasından
+ANSWER: A
+
+Buludda "Rapid elasticity" (Sürətli çeviklik) xüsusiyyəti nəyə xidmət edir?
+A. Resursların tələbə uyğun olaraq dərhal genişlənməsinə və ya kiçilməsinə
+B. Şirkətin internet sürətinin hər ay sabit şəkildə iki dəfə artırılması vədinə
+C. İstifadəçi şifrələrinin hər gün sistem tərəfindən avtomatik dəyişdirilməsinə
+D. Serverlərin yerləşdiyi binaların zəlzələyə davamlı materialdan qurulması işinə
+ANSWER: A
+
+"Measured service" (Ölçülən xidmət) prinsipi iqtisadi cəhətdən nəyi təmin edir?
+A. İstifadəçinin yalnız faktiki istifadə etdiyi resurs miqdarı qədər ödəniş etməsini
+B. Aylıq abunə haqqının resurs istifadəsindən asılı olmayaraq həmişə sabit qalmasını
+C. Şəbəkə trafikinin provayder tərəfindən heç bir ölçü aparılmadan təqdim edilməsini
+D. Avadanlıqların texniki nasazlıqlarının istifadəçi tərəfindən pulsuz təmirini
+ANSWER: A
+
+Thomas Erl-ə görə "Multi-tenancy" memarlıq prinsipinin əsas üstünlüyü nədir?
+A. Bir neçə müstəqil istifadəçinin eyni fiziki resursdan ortaq şəkildə yararlanması
+B. Hər bir müştərinin eyni vaxtda bir neçə fərqli bulud provayderi ilə işləməsi işi
+C. Məlumatların yalnız bir ölkənin daxili qanunvericiliyinə uyğun saxlanması tələbi
+D. Proqram təminatının hər bir müştəri üçün fərdi kodlarla yenidən yazılması prosesi
+ANSWER: A
+
+"Scalability" (Miqyaslılıq) anlayışı bulud infrastrukturunda nəyi ifadə edir?
+A. Sistemin artan iş yükünü qarşılamaq üçün öz imkanlarını genişləndirmə qabiliyyətini
+B. Serverlərin fiziki ölçülərinin xüsusi mexanizmlər vasitəsilə böyüdülməsi prosesini
+C. Şəbəkəyə qoşulan cihazların markasının mütləq mərkəzi sistemə uyğun olması şərtini
+D. İstifadəçilərin sayını hər il mütləq şəkildə sabit saxlamaq üçün görülən texniki işi
+ANSWER: A
+
+Buludda "Ubiquitous network access" dedikdə hansı mühit nəzərdə tutulur?
+A. Xidmətlərin hər yerdə və hər hansı bir cihazla əlçatan olması vəziyyəti
+B. Şəbəkəyə girişin yalnız şirkətin baş ofisindəki mərkəzi otaqdan mümkünlüyü
+C. İnternet provayderinin müştəriyə yalnız bir növ uzaqdan giriş kanalı verməsi
+D. İstifadəçilərin eyni vaxtda yalnız tək bir mobil cihazdan sistemə daxil olması
+ANSWER: A
+
+"Location independence" (Məkandan asılı olmamaq) prinsipi müştəriyə nə vəd edir?
+A. Resursların dəqiq yerini bilmədən onlara hər yerdən müdaxilə etmək imkanını
+B. Serverlərin yerləşdiyi otağın coğrafi koordinatlarının müştəriyə gizli verilməsini
+C. İstifadəçinin yalnız öz yaşadığı şəhər daxilində bulud xidmətlərindən yararlanmasını
+D. Şəbəkə kabellərinin mütləq şəkildə müştərinin evinə qədər fiziki çəkilməsi tələbini
+ANSWER: A
+
+Buludun "Elasticity" xüsusiyyəti "Scalability" anlayışından nə ilə fərqlənir?
+A. Resursların həm artma, həm də azalma dinamikasının avtomatik olması ilə
+B. Yalnız yaddaş həcminin artırılması üçün istifadə olunan daxili texniki kodla
+C. İstifadəçilərin sayının proqram vasitəsilə süni şəkildə məhdudlaşdırılması ilə
+D. Şəbəkə təhlükəsizliyinin mütləq mərkəzi bir antivirus proqramı ilə təmini ilə
+ANSWER: A
+
+"Self-provisioning" anlayışı buludun hansı xüsusiyyəti ilə birbaşa əlaqəlidir?
+A. On-demand self-service prinsipi ilə istifadəçinin özünə xidmət göstərməsi
+B. Proqram təminatının yeni versiyalarının mütləq provayder tərəfindən yüklənməsi
+C. İnternet sürətinin gün ərzində bir neçə dəfə avtomatik olaraq aşağı düşməsi işi
+D. Serverlərin hər həftə sonu texniki baxış üçün məcburi şəkildə söndürülməsi rejimi
+ANSWER: A
+
+Resource Pooling zamanı "Virtualization" texnologiyasının əsas rolu nədir?
+A. Fiziki resursları abstraksiya edərək onları müştərilər arasında bölüşdürmək
+B. İnternet kanalının genişliyini yalnız provayderin daxili şəbəkəsi üçün saxlamaq
+C. Prosessorun temperaturunu hər saniyə istifadəçiyə qrafik şəklində göndərmək işi
+D. Aylıq ödənişlərin məbləğini istifadəçinin bank hesabına uyğun olaraq gizlətmək
+ANSWER: A
+
+"Usage-based billing" (İstifadəyə əsaslanan hesablaşma) hansı prinsipin nəticəsidir?
+A. Measured service xüsusiyyəti sayəsində resurs sərfinin dəqiq ölçülməsinin
+B. Şirkətin rəhbərliyinin hər ay sabit miqdarda xidmət haqqı ödəmək qərarının
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə səsli bildirişlərin göndərilməsinin
+D. Serverlərin istifadə müddətinin yalnız xüsusi mexaniki saatlarla qeydə alınmasının
+ANSWER: A
+
+Multi-tenancy mühitində "Isolation" (Təcridetmə) nə üçün kritik əhəmiyyət kəsb edir?
+A. Bir müştərinin məlumatlarının digər müştəri tərəfindən görülməməsi üçün
+B. İstifadəçilərin yalnız eyni marka kompüterlərdən istifadə etməsini təmin etmək
+C. Şirkətin daxili yazışmalarının yalnız kağız üzərində aparılmasını tələb etmək
+D. İnternet bağlantısı kəsildiyi zaman bütün məlumatların avtomatik silinməsi üçün
+ANSWER: A
+
+Buludda "Workload distribution" (İş yükünün paylanması) prinsipi nəyi təmin edir?
+A. Hesablama tapşırıqlarının bir neçə aktiv resurs arasında bərabər bölünməsini
+B. İşçilərin gün ərzində kompüter qarşısında keçirdikləri vaxtın mərkəzi uçotunu
+C. Prosessorun daxili tezliyinin yalnız bir tətbiq üçün maksimuma qaldırılmasını
+D. Şəbəkəyə qoşulan cihazların sayının proqram vasitəsilə mütləq azaldılmasını
+ANSWER: A
+
+"Resiliency" (Dözümlülük) prinsipi bulud memarlığında nəyi ifadə edir?
+A. Sistemin nasazlıq və ya xətadan sonra dərhal bərpa olunma qabiliyyətini
+B. Serverlərin yerləşdiyi otağın rütubət səviyyəsinin həmişə sabit saxlanılmasını
+C. İstifadəçilərin sistemə giriş şifrələrinin mütləq 20 simvoldan çox olması tələbi
+D. Şəbəkə kabellərinin fiziki olaraq yanğına davamlı materialdan hazırlanması işi
+ANSWER: A
+
+Buludda "Pay-as-you-go" modeli hansı əsas xüsusiyyətə söykənir?
+A. Measured service (Ölçülən xidmət) prinsipi ilə dəqiq hesablaşma aparılmasına
+B. Xidmətlərin yalnız əvvəlcədən ödəniş edildiyi halda aktiv edilməsi qaydasına
+C. İnternet sürəti artdıqca ödəniş məbləğinin avtomatik olaraq aşağı düşməsi işinə
+D. Serverlərin mülkiyyət hüququnun hər ay bir neçə müştəri arasında paylanmasına
+ANSWER: A
+
+"On-demand" anlayışı bulud xidmətlərində hansı vaxt çərçivəsini nəzərdə tutur?
+A. Resursların ehtiyac yarandığı andan dərhal və ya çox qısa müddətdə verilməsini
+B. İstifadəçinin müraciətindən ən azı üç iş günü keçdikdən sonra xidmət açılmasını
+C. Şəbəkə resurslarının yalnız gecə saatlarında daha sürətli işləməsi rejimini
+D. Prosessor gücünün hər ay yalnız bir dəfə müştəriyə təqdim edilməsi planını
+ANSWER: A
+
+Resource Pooling zamanı resurslar müştərilərə necə təqdim olunur?
+A. Müştərinin tələbinə uyğun olaraq mücərrəd və virtual resurslar şəklində
+B. Fiziki disk və prosessorun müştərinin ofisinə kuryerlə göndərilməsi vasitəsilə
+C. Yalnız bir istifadəçinin icazəsi olduğu halda digər istifadəçilərə paylanmaqla
+D. Şəbəkə kanalının bütün istifadəçilər üçün mütləq şəkildə qapalı saxlanılması ilə
+ANSWER: A
+
+Broad Network Access xüsusiyyətində "Heterogeneous devices" nəyi ifadə edir?
+A. Müxtəlif növ və markalı cihazların (mobil, planşet, PC) buluda qoşula bilməsini
+B. Yalnız eyni istehsalçı tərəfindən hazırlanan cihazların bir-birini tanıması işini
+C. Cihazların daxili hissələrinin mütləq fərqli metallardan hazırlanması tələbini
+D. İnternetə qoşulmaq üçün hər bir cihazın xüsusi lisenziya alması zərurətini
+ANSWER: A
+
+Buludun "Rapid elasticity" xüsusiyyəti olmasaydı, şirkətlər hansı çətinliklə üzləşərdi?
+A. Ani yük artımı zamanı sistemin çökməsi və ya resurs çatışmazlığı problemi ilə
+B. İstifadəçi şifrələrinin yadda saxlanılması üçün əlavə dəftərlərin tutulması ilə
+C. İnternet sürətinin hər gün mütləq şəkildə mühəndislər tərəfindən ölçülməsi ilə
+D. Kompüter monitorlarının rənglərinin proqram vasitəsilə tənzimlənə bilməməsi ilə
+ANSWER: A
+
+Multi-tenancy modelində provayderin əsas məqsədi nədir?
+A. Resurslardan istifadə səmərəliliyini artırmaq və xərcləri optimallaşdırmaq
+B. Müştərilərin sayını mütləq şəkildə bir nəfərlə məhdudlaşdırıb idarə etmək
+C. Şəbəkəyə qoşulan cihazların hamısını eyni marka ilə əvəz etmək işi
+D. Serverlərin yerləşdiyi otağa müştərilərin daxil olmasına icazə vermək
+ANSWER: A
+
+"Resource Pooling" xüsusiyyətində "Abstraction" (Mücərrədləşdirmə) nə üçün lazımdır?
+A. Müştərini fiziki avadanlığın mürəkkəb texniki idarəetməsindən uzaq tutmaq üçün
+B. Məlumatların daxili şifrələrinin hər bir işçi tərəfindən asanlıqla oxunması üçün
+C. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə göstərmək üçün
+D. Proqram təminatının interfeysindəki düymələrin sayını proqram vasitəsilə artırmaq
+ANSWER: A
+
+"Measured service" zamanı hansı resurslar adətən monitorinq edilir?
+A. Prosessor yükü, yaddaş həcmi, şəbəkə trafiki və aktiv istifadəçi hesabları
+B. Şirkət işçilərinin gün ərzində içdikləri suyun miqdarı və nahar fasilələri
+C. Ofis mebellərinin köhnəlmə dərəcəsi və otaqların təmizlik səviyyəsi ölçüsü
+D. Klaviatura düymələrinə saniyə ərzində basılma sayının ümumi orta hesabı
+ANSWER: A
+
+NIST modelində qeyd olunan 5 əsas xüsusiyyət buluda hansı statusu verir?
+A. Onu ənənəvi İT infrastrukturundan fərqləndirən rəsmi standart statusunu
+B. Xidmətlərin yalnız pulsuz olaraq paylanması barədə olan tövsiyə statusunu
+C. İnternet sürətinin hər bir ölkədə eyni olması haqqında olan dövlət qərarını
+D. Serverlərin mütləq yaşıl rəngli kabellərlə qoşulması barədə olan texniki sənədi
+ANSWER: A
+
+IaaS (İnfrastruktur xidmət modeli) zamanı provayderin əsas məsuliyyət zonasına nə daxildir?
+A. Fiziki serverlərin, şəbəkə avadanlıqlarının və soyutma sistemlərinin idarəsi
+B. Müştərinin virtual maşın daxilində quraşdırdığı tətbiqi proqramların kodu
+C. İstifadəçi məlumatlarının daxili strukturu və verilənlər bazasının dizaynı
+D. Əməliyyat sisteminin daxili təhlükəsizlik yenilənmələrinin mütləq icrası
+ANSWER: A
+
+SaaS (Proqram təminatı xidmət modeli) modelində müştəri üçün idarəetmə səviyyəsi necədir?
+A. Müştəri yalnız proqramın funksional tənzimləmələrinə və istifadəsinə cavabdehdir
+B. Müştəri virtual maşınların sayını və prosessor gücünü fərdi olaraq tənzimləyir
+C. Əməliyyat sisteminin nüvə (kernel) parametrləri müştəri tərəfindən idarə olunur
+D. Fiziki yaddaş qurğularının RAID konfiqurasiyası müştəri tərəfindən müəyyən edilir
+ANSWER: A
+
+PaaS (Platforma xidmət modeli) hansı növ istifadəçi qrupu üçün ən əlverişli seçimdir?
+A. İnfrastruktur qayğısı çəkmədən birbaşa kod yazmaq istəyən proqram tərtibatçıları
+B. Kompüter avadanlıqlarının fiziki təmiri ilə məşğul olan texniki mühəndislər
+C. Şirkətin yalnız maliyyə və mühasibat işlərini aparan sıravi ofis əməkdaşları
+D. Şəbəkə kabellərinin çəkilməsi və montajı ilə məşğul olan sahə mütəxəssisləri
+ANSWER: A
+
+"Shared Responsibility Model" (Ortaq məsuliyyət) IaaS modelində müştəriyə hansı vəzifəni qoyur?
+A. Əməliyyat sisteminin, tətbiqlərin və məlumatların təhlükəsizliyini təmin etmək
+B. Data mərkəzindəki fiziki serverlərin tozdan təmizlənməsi işini təşkil etmək
+C. Elektrik kəsilməsi zamanı generatorların işə düşməsini mərkəzdən idarə etmək
+D. Binanın yanğın təhlükəsizliyi sistemlərinin illik monitorinqini həyata keçirmək
+ANSWER: A
+
+SaaS modelinin tətbiqinə dair ən geniş yayılmış real ssenari hansı bənddə düzgün verilib?
+A. E-poçt xidmətləri (Gmail) və ya onlayn ofis tətbiqlərinin (Office 365) istifadəsi
+B. Virtual serverlərin daxilində sıfırdan yeni bir əməliyyat sisteminin qurulması
+C. Proqramçıların özləri üçün fərdi verilənlər bazası mühiti hazırlaması prosesi
+D. Şəbəkə routerlərinin proqram təminatının mühəndislər tərəfindən yenilənməsi
+ANSWER: A
+
+Xidmət modelləri arasında "Abstraction" (Mücərrədləşdirmə) səviyyəsi ən yüksək olan hansıdır?
+A. İstifadəçinin bütün texniki detallardan tam uzaq olduğu SaaS xidmət modeli
+B. Müştərinin virtual infrastrukturu özünün idarə etdiyi IaaS yerləşdirmə növü
+C. Tərtibatçılar üçün nəzərdə tutulan inkişaf mühitini təklif edən PaaS sistemi
+D. Fiziki serverlərin icarəyə götürülərək ofisə gətirildiyi ənənəvi xidmət növü
+ANSWER: A
+
+PaaS modelinin istifadəsi zamanı yaranan "Vendor Lock-in" riski nəyi ifadə edir?
+A. Yazılmış kodun başqa provayderin platformasına keçirilməsinin çətin olmasını
+B. Provayderin ofisindəki qapıların müştərilərin üzünə bağlanması texniki xətası
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə aşağı salınması vəziyyəti
+D. İstifadəçinin şifrəsinin sistem tərəfindən qəsdən bloklanması və silinməsi işi
+ANSWER: A
+
+IaaS modelində "Virtual Machine" (VM) anlayışı hansı komponenti əvəz edir?
+A. Əvvəllər şirkətlərin aldığı fiziki server avadanlıqlarını və infrastrukturunu
+B. Müştərilərin istifadə etdiyi monitor və klaviatura kimi giriş-çıxış qurğularını
+C. Şəbəkə mühəndislərinin gündəlik olaraq yazdığı kağız üzərindəki hesabatları
+D. Data mərkəzində çalışan mühafizəçilərin istifadə etdiyi nəzarət kameralarını
+ANSWER: A
+
+Aşağıdakılardan hansı SaaS modelinin ən mühüm iqtisadi üstünlüklərindən biridir?
+A. Proqramın lisenziya və infrastruktur xərclərinin vahid abunə haqqına daxil olması
+B. Müştərinin proqramın hər bir yeni versiyası üçün ayrıca tam ödəniş etməsi tələbi
+C. İnternet provayderinə ödənilən aylıq vəsaitin SaaS şirkəti tərəfindən qarşılanması
+D. Şirkət işçilərinin kompüterlərinin hər il pulsuz yenisi ilə əvəzlənməsi vədi
+ANSWER: A
+
+PaaS modelində "Runtime" mühiti dedikdə Erl-ə görə nə nəzərdə tutulur?
+A. Proqram kodunun icra edilməsi üçün hazır və sazlanmış texniki mühit qatı
+B. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatı
+C. Serverin elektrik enerjisi ilə təmin olunma müddətini göstərən rəqəmsal lövhə
+D. Proqram təminatının interfeysindəki düymələrin hərəkət sürətini ölçən daxili kod
+ANSWER: A
+
+Sosinsky-ə görə IaaS modelində "Scalability" necə həyata keçirilir?
+A. Ehtiyac yarandıqda yeni virtual serverlərin və yaddaşın dərhal əlavə edilməsi ilə
+B. Fiziki serverlərin içindəki detalların mühəndislər tərəfindən əllə dəyişməsi ilə
+C. İnternetə qoşulan cihazların sayını proqram vasitəsilə süni şəkildə artırmaqla
+D. Şirkətin ofis binasının ölçüsünün genişləndirilməsi barədə qərarın alınması ilə
+ANSWER: A
+
+SaaS modelində təhlükəsizlik baxımından ən böyük risk hansı hesab edilir?
+A. Məlumatların müştərinin tam nəzarətindən kənarda, provayder tərəfdə saxlanması
+B. Proqram təminatının interfeys rənglərinin tələbə tərəfindən bəyənilməməsi ehtimalı
+C. İnternetə qoşulan kompüterlərin klaviatura düymələrinin tez sıradan çıxması işi
+D. Server otağındakı işıqların çox parlaq olması səbəbindən yaranan texniki xəta
+ANSWER: A
+
+IaaS, PaaS və SaaS modellərini bir-birindən fərqləndirən əsas amil hansıdır?
+A. İdarəetmə və məsuliyyətin provayder ilə müştəri arasında bölünmə nisbəti
+B. Serverlərin hansı marka prosessorlar vasitəsilə yığılması barədə olan məlumat
+C. Xidmətlərin yalnız günün müəyyən saatlarında aktiv olması barədə olan qayda
+D. Şəbəkə kabellərinin rənginin proqramın işləmə sürətinə göstərdiyi təsir dərəcəsi
+ANSWER: A
+
+Real ssenari: Bir proqramçı Python dilində yazdığı kodu tez bir zamanda sınaqdan keçirmək üçün hansı modeli seçməlidir?
+A. Konfiqurasiya ilə vaxt itirməmək üçün inkişaf mühiti təklif edən PaaS modelini
+B. Fiziki server alıb onu ofisdə quraşdırmaqla məşğul olan ənənəvi İT metodunu
+C. Yalnız hazır proqramların istifadəsi üçün nəzərdə tutulan SaaS xidmət növünü
+D. Şəbəkə kabellərinin uclarını birləşdirməklə məşğul olan texniki infrastruktur işini
+ANSWER: A
+
+IaaS modelində "Compute" resursu dedikdə nə başa düşülür?
+A. Virtual mərkəzi prosessor (vCPU) və operativ yaddaşın (RAM) təqdim edilməsi
+B. Şirkətin mühasibatlıq proqramında aparılan bütün riyazi hesablamaların siyahısı
+C. Data mərkəzindəki mühəndislərin aylıq maaşlarının hesablanması üçün olan cədvəl
+D. Kompüterin monitorundakı piksellərin sayını avtomatik hesablayan daxili alət
+ANSWER: A
+
+PaaS modelində provayder aşağıdakılardan hansını idarə edir?
+A. Şəbəkə infrastrukturunu, əməliyyat sistemini və verilənlər bazası mühitini
+B. Müştərinin sistemə daxil etdiyi şəxsi faylların məzmununu və gizli kodlarını
+C. Proqramçının yazdığı tətbiqi proqramın daxili məntiqini və alqoritmlərini
+D. Ofis daxilindəki istifadəçilərin hansı növ siçan və klaviatura işlətməsini
+ANSWER: A
+
+"Everything-as-a-Service" (XaaS) konsepti nəyi ifadə edir?
+A. Bulud üzərindən hər hansı bir texnoloji resursun xidmət kimi təqdim olunmasını
+B. Mağazada satılan bütün elektron cihazların qiymətinin eyni olması vəziyyətini
+C. Şirkətin bütün mebel və avadanlıqlarının mütləq internetə qoşulması tələbini
+D. Dünyadakı bütün insanların eyni vaxtda eyni proqramdan istifadə etməsi işini
+ANSWER: A
+
+SaaS modelində proqram təminatının yenilənməsi (Update) necə baş verir?
+A. Provayder tərəfindən mərkəzləşdirilmiş qaydada və bütün müştərilər üçün eyni vaxtda
+B. Hər bir istifadəçinin öz kompüterinə yeni faylları disk vasitəsilə yükləməsi ilə
+C. İnternet sürətinin hər dəfə aşağı düşdüyü zaman sistemin özünü söndürməsi ilə
+D. Şirkət rəhbərliyinin xüsusi əmri ilə proqramın kodlarının əllə dəyişdirilməsi ilə
+ANSWER: A
+
+IaaS modelinin "Pay-per-use" mexanizmi müştəriyə nəyə görə sərfəlidir?
+A. İstifadə edilməyən resurslar üçün pul ödəməyib xərclərə qənaət etdiyi üçün
+B. Xidmət haqqının hər il mütləq şəkildə iki dəfə aşağı düşəcəyinə inandığı üçün
+C. Provayderin ona hər ay pulsuz olaraq yeni prosessor hədiyyə etdiyi üçün
+D. Şəbəkəyə qoşulan cihazların sayını proqram vasitəsilə gizlədə bildiyi üçün
+ANSWER: A
+
+"Middleware" anlayışı bulud xidmət modellərində ən çox hansı səviyyədə rast gəlinir?
+A. Əməliyyat sistemi ilə tətbiq arasında vasitəçi qat rolunu oynayan PaaS modelində
+B. Fiziki kabellərin bir-birinə bağlanması prosesini idarə edən IaaS səviyyəsində
+C. İstifadəçinin yalnız brauzerlə daxil olduğu ən yuxarı SaaS proqram səviyyəsində
+D. Server otağındakı generatorların yağının dəyişdirilməsi zamanı olan texniki işdə
+ANSWER: A
+
+IaaS xidmətindən istifadə edən şirkət üçün "Hardware Refresh" (Avadanlıq yenilənməsi) necə olur?
+A. Şirkət bu barədə düşünmür, köhnəlmiş avadanlıqları provayder özü yeniləyir
+B. Şirkət işçiləri data mərkəzinə gedərək köhnə diskləri yeniləri ilə əvəz edirlər
+C. İnternet vasitəsilə hər bir işçinin kompüterinin yaddaşı süni şəkildə artırılır
+D. Serverlərin yerləşdiyi otağın divarlarının rəngi hər il yenidən rənglənir
+ANSWER: A
+
+SaaS modelində "Multi-tenancy" necə tətbiq olunur?
+A. Bir tətbiq instansiyasının məlumat bazası səviyyəsində müştərilər arasında bölünməsi
+B. Hər bir müştərinin öz ofisində ayrı bir proqram mühiti qurması məcburiyyəti ilə
+C. Şəbəkəyə qoşulan cihazların mütləq şəkildə eyni marka və modeldən olması ilə
+D. Proqramın daxili kodlarının hər bir müştəri üçün fərdi dildə yenidən yazılması ilə
+ANSWER: A
+
+"PaaS" istifadə edərkən "Infrastructure Management" qayğısı kimin üzərinə düşür?
+A. Tamamilə bulud provayderinin üzərinə, müştəri bu işlərlə məşğul olmur
+B. Müştərinin ofisində çalışan sistem inzibatçılarının və mühəndislərin üzərinə
+C. İnternet xidmətini təmin edən yerli rabitə müəssisəsinin texniki heyəti üzərinə
+D. Proqramı istifadə edən hər bir son istifadəçinin fərdi şəkildə öz üzərinə
+ANSWER: A
+
+IaaS modelinin mənfi cəhəti kimi göstərilən "Technical Expertise" tələbi nə deməkdir?
+A. Virtual maşınları və əməliyyat sistemlərini idarə etmək üçün mütəxəssis lazımdır
+B. Şirkət işçilərinin hər birinin mütləq şəkildə ingilis dilini mükəmməl bilməsi tələbi
+C. Kompüterlərin daxili hissələrini təmizləmək üçün xüsusi sertifikatın olması zərurəti
+D. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həll edilməsi şərti
+ANSWER: A
+
+Bulud modelləri arasında "Cost Predictability" (Xərclərin öncədən bilinməsi) ən asan hansındadır?
+A. Sabit aylıq və ya illik abunə haqqı təklif edən SaaS modelində
+B. Resurs istifadəsi hər saniyə dəyişən mürəkkəb IaaS infrastruktur sistemində
+C. Proqramçıların yazdığı kodun həcminə görə qiymət dəyişən PaaS platformasında
+D. Ofisdəki kompüterlərin sayına görə cərimələrin tətbiq edildiyi köhnə İT metodunda
+ANSWER: A
+
+"Public Cloud" (İctimai bulud) modelinin əsas iqtisadi xüsusiyyəti nədən ibarətdir?
+A. Resursların bir provayder tərəfindən çoxsaylı müştərilərə internet üzərindən satılması
+B. İnfrastrukturun qurulması üçün şirkətin ilkin olaraq böyük investisiyalar etməsi
+C. Avadanlıqların yalnız dövlət büdcəsi hesabına alınaraq pulsuz paylanması işi
+D. Serverlərin mülkiyyət hüququnun mütləq şəkildə son istifadəçiyə ötürülməsi
+ANSWER: A
+
+"Private Cloud" (Özəl bulud) modelini ictimai buluddan fərqləndirən əsas amil hansıdır?
+A. İnfrastrukturun yalnız bir təşkilatın daxili ehtiyacları üçün ayrılmış olması
+B. Resursların dünyanın istənilən yerindən hər kəs üçün tam açıq şəkildə olması
+C. Şəbəkə sürətinin provayder tərəfindən hər gün mütləq şəkildə artırılması vədi
+D. Serverlərin yerləşdiyi otağın açarlarının bütün dünya dövlətlərinə verilməsi
+ANSWER: A
+
+"Hybrid Cloud" modelinin tətbiqi biznesə hansı texniki üstünlüyü qazandırır?
+A. Həssas məlumatları daxildə saxlayıb, digər işləri ictimai buluda ötürmək imkanını
+B. Şirkətin bütün İT xərclərini mütləq şəkildə sıfıra endirmək üçün istifadə edilməsini
+C. İnternetə qoşulan cihazların sayını proqram vasitəsilə süni şəkildə artırmaq işini
+D. Bütün dünyadakı serverlərin eyni vaxtda mütləq bir-birinə kopyalanması vəzifəsini
+ANSWER: A
+
+"Community Cloud" (İcma buludu) modelinin əsas məqsədi hansı bənddə düzgün izah edilib?
+A. Oxşar tələbləri və missiyaları olan bir neçə təşkilatın ortaq infrastruktur istifadəsi
+B. Bir ailənin üzvləri arasında şəkillərin paylaşılması üçün qurulan kiçik yerli şəbəkə
+C. Dünyadakı bütün insanların eyni vaxtda daxil ola bildiyi tam anonim mərkəzi baza
+D. Şəbəkə kabellərinin yalnız müəyyən bir kənd və ya qəsəbə daxilində çəkilməsi işi
+ANSWER: A
+
+İctimai bulud modelində "Multi-tenancy" anlayışı təhlükəsizlik üçün hansı riski yaradır?
+A. Eyni fiziki resursu paylaşan digər müştərilərin məlumatlarına qeyri-qanuni giriş ehtimalı
+B. İnternet provayderinin aylıq faturanı qəsdən daha baha qiymətə müştəriyə göndərməsi
+C. Server otağındakı işıqların çox parlaq olması səbəbindən yaranan texniki xəta faktı
+D. Kompüter monitorlarının rənglərinin tələbə tərəfindən bəyənilməməsi ehtimalı vəziyyəti
+ANSWER: A
+
+Sosinsky-ə görə Özəl buludun qurulmasında "On-premise" anlayışı nəyi ifadə edir?
+A. Bulud infrastrukturunun şirkətin öz fiziki binası daxilində yerləşməsi və idarəsini
+B. Serverlərin yalnız kosmik stansiyalarda yerləşdirilməsi barədə olan gizli texniki layihə
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə hər saat başı sınaqdan keçirilməsi
+D. Şirkət işçilərinin hamısının mütləq şəkildə eyni marka mobil telefondan istifadəsi
+ANSWER: A
+
+"Cloud Bursting" texnikası adətən hansı yerləşdirmə modelində tətbiq olunur?
+A. Yerli resurslar çatmayanda ictimai buluda keçid edən Hibrid bulud modelində
+B. Məlumatların yalnız bir dəfə oxunması üçün nəzərdə tutulan köhnə Özəl buludda
+C. İnternet bağlantısı olmayan ucqar bölgələrdə qurulan kiçik İcma buludu növündə
+D. Serverlərin tamamilə suyun altında yerləşdirildiyi xüsusi İctimai bulud mühitində
+ANSWER: A
+
+Özəl buludun (Private Cloud) ən böyük maliyyə çatışmazlığı hansı variantda qeyd olunub?
+A. Avadanlıqların alınması və mütəxəssis saxlanılması üçün yüksək kapital xərcləri
+B. Xidmətlərin yalnız kredit kartı ilə ödəniş edildiyi halda dərhal söndürülməsi riski
+C. İnternet trafikinin provayder tərəfindən hər saniyə ölçülərək baha hesablanması
+D. Serverlərin yerləşdiyi otağın divarlarının hər ay yenidən rənglənməsi məcburiyyəti
+ANSWER: A
+
+"Public Cloud" modelində infrastrukturun yenilənməsi kimin öhdəliyinə düşür?
+A. Bulud xidmətini təqdim edən provayder şirkətin (məs. AWS, Azure) üzərinə
+B. Proqramı kompüterinə yükləyən hər bir son istifadəçinin fərdi şəkildə öz üzərinə
+C. Şirkətin ofisində çalışan təmizlik və texniki xidmət heyətinin ümumi məsuliyyətinə
+D. İnternet kabellərini küçədən çəkən yerli rabitə idarəsinin mühəndisləri üzərinə
+ANSWER: A
+
+Hibrid bulud modelində "Data Sovereignty" (Məlumat suverenliyi) necə qorunur?
+A. Kritik məlumatları ölkə daxilindəki özəl buludda, digərlərini isə xaricdə saxlamaqla
+B. Bütün məlumatların internetdə hər kəs üçün açıq və şiffrəsiz şəkildə yayımlanması ilə
+C. Serverlərin üzərinə mütləq şəkildə dövlət bayrağının şəklinin yapışdırılması yolu ilə
+D. Şəbəkəyə qoşulan cihazların sayını hər gün dövlət orqanlarına hesabat verməklə
+ANSWER: A
+
+İcma buludunun (Community Cloud) idarəedilməsi adətən kim tərəfindən həyata keçirilir?
+A. İcmaya daxil olan təşkilatların biri və ya üçüncü tərəf provayder tərəfindən
+B. Dünyadakı bütün insanların iştirak etdiyi böyük bir onlayn səsvermə yolu ilə
+C. İnternet sürətini ən yüksək səviyyədə təmin edən təsadüfi bir istifadəçi tərəfindən
+D. Serverlərin markasına görə seçilən ən qədim istehsalçı şirkətin mühəndis heyəti
+ANSWER: A
+
+Özəl buludun (Private Cloud) ictimai buludla müqayisədə ən mühüm üstünlüyü nədir?
+A. Məlumatlar və resurslar üzərində tam nəzarətin və yüksək təhlükəsizliyin olması
+B. İnternet sürətinin hər zaman bütün dünyada eyni olması barədə verdiyi tam təminat
+C. Avadanlıqların mülkiyyətinin provayder tərəfindən müştəriyə pulsuz hədiyyə edilməsi
+D. Şəbəkə kabellərinin rənginin proqramın işləmə sürətinə göstərdiyi müsbət təsir
+ANSWER: A
+
+İctimai buludda "Vendor Lock-in" problemi müştəriyə necə təsir edə bilər?
+A. Müştərinin bir provayderin texnologiyasından digərinə keçməsini çətinləşdirə bilər
+B. Mağazada satılan bulud cihazlarının qutularının qıfıllanması vəziyyəti yarada bilər
+C. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli tələb oluna bilər
+D. Şirkətin ofisindəki kompüterlərin sayını süni şəkildə artırmaq məcburiyyəti yaradır
+ANSWER: A
+
+Aşağıdakılardan hansı "Hibrid Bulud" arxitekturasının təməl komponentidir?
+A. Özəl və ictimai bulud seqmentləri arasında məlumatların idarə olunan inteqrasiyası
+B. Şəbəkə kabellərinin mütləq şəkildə həm fiber, həm də mis materialdan olması işi
+C. Serverlərin yerləşdiyi otağın həm soyuq, həm də isti hava ilə təmin edilməsi qaydası
+D. İstifadəçilərin həm kompüter, həm də yazı makinasından eyni vaxtda istifadə etməsi
+ANSWER: A
+
+Dövlət qurumlarının və ya bankların Özəl buluda üstünlük verməsinin əsas səbəbi nədir?
+A. Qanunvericilik tələbləri, yüksək gizlilik və məlumatların daxildə qalması zərurəti
+B. İnternet provayderlərinə ödənilən aylıq xidmət haqqından tamamilə azad olmaq istəyi
+C. Serverlərin üzərindəki düymələrin rəngini hər gün dəyişmək imkanının olması faktı
+D. Ofis daxilindəki kompüterlərin sayını bütün dünyaya nümayiş etdirmək məqsədi
+ANSWER: A
+
+"Managed Private Cloud" anlayışı Sosinsky-ə görə nəyi ifadə edir?
+A. Özəl buludun fiziki olaraq kənarda bir provayder tərəfindən idarə edilməsini
+B. Şirkət rəhbərliyinin hər gün serverləri əllə təmizləməsi barədə olan daxili əmri
+C. İnternet sürətinin yalnız mühəndislər tərəfindən səsli komanda ilə artırılması işini
+D. Serverlərin yerləşdiyi binaların hər ay başqa bir şəhərə köçürülməsi prosesini
+ANSWER: A
+
+"Public Cloud" mühitində miqyasa uyğunluq (Scalability) necə təmin edilir?
+A. Müştərinin sorğusu ilə virtual resursların demək olar ki, limitsiz artırılması ilə
+B. Fiziki serverlərin içindəki detalların müştəri tərəfindən kəlbətinlə dəyişməsi ilə
+C. İnternetə qoşulan cihazların sayını proqram vasitəsilə mütləq şəkildə azaltmaqla
+D. Şirkət işçilərinin sayının hər il mütləq şəkildə sabit saxlanılması barədə qərarla
+ANSWER: A
+
+Hibrid buludda "Orchestration" (Koordinasiya) nə üçün vacibdir?
+A. Müxtəlif bulud mühitləri arasında tapşırıqların avtomatlaşdırılmış idarəsi üçün
+B. Server otağında musiqi alətlərinin çalınması və işçilərin istirahəti üçün vasitə
+C. İnternet provayderləri arasında ən ucuz qiyməti təklif edən şirkəti tapmaq işi
+D. Virtual maşınların daxilindəki faylların yalnız əlifba sırası ilə düzülməsi qaydası
+ANSWER: A
+
+"Virtual Private Cloud" (VPC) anlayışını ictimai bulud daxilində necə izah etmək olar?
+A. İctimai bulud daxilində müştəri üçün ayrılmış izolyasiya olunmuş məntiqi şəbəkə
+B. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi
+C. Şəbəkəyə qoşulan zaman hər dəfə yeni bir ad və soyad seçmək məcburiyyəti işi
+D. Kompüter monitorlarının parlaqlığını ətrafdakı işığa görə tənzimləyən daxili kod
+ANSWER: A
+
+Sosinsky-ə görə yerləşdirmə modelləri seçilərkən "Total Cost of Ownership" (TCO) nədir?
+A. Infrastrukturun qurulması və saxlanılması üçün lazım olan bütün xərclərin cəmi
+B. Şirkətin il ərzində satdığı məhsulların ümumi bazar qiymətinin orta hesabı miqdarı
+C. Serverlərin çəkisinin ümumi tonla ifadə edilən fiziki göstəricisi barədə məlumat
+D. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının ümumi sayı və dəyəri
+ANSWER: A
+
+"OpenStack" kimi texnologiyalar adətən hansı bulud modelini qurmaq üçün istifadə edilir?
+A. Müəssisə daxilində yüksək idarəetmə imkanları təklif edən Özəl bulud modelini
+B. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün nəzərdə tutulan PaaS mühiti
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan ictimai əyləncə buludu
+D. Server otağındakı generatorların yağının dəyişdirilməsi üçün olan texniki təlimat
+ANSWER: A
+
+Hibrid buludun qurulmasında "Security Compliance" məsuliyyəti kimin üzərinə düşür?
+A. Həm bulud provayderinin, həm də yerli infrastrukturu idarə edən müştərinin üzərinə
+B. Şirkətin ofisində çalışan mühafizə xidmətinin və binanın komendantının üzərinə
+C. İnternet vasitəsilə proqramları yükləyən hər bir tələbənin fərdi məsuliyyəti olaraq
+D. Serverlərin markasına görə seçilən ən gənc istehsalçı şirkətin kuryerləri üzərinə
+ANSWER: A
+
+"Multi-cloud" strategiyası ilə "Hybrid Cloud" arasındakı əsas fərq nədən ibarətdir?
+A. Multi-cloud bir neçə provayderin istifadəsidir, Hibrid isə fərqli modellərin vəhdətidir
+B. Multi-cloud yalnız mobil cihazlar üçündür, Hibrid isə yalnız masaüstü kompüterlər
+ C. Hibrid buludda internet bağlantısı mütləq deyil, Multi-cloud-da isə mütləqdir faktı
+D. Bu iki termin texniki olaraq bir-birindən heç nə ilə fərqlənməyən eyni anlayışlardır
+ANSWER: A
+
+Bir universitetin bir neçə fakültəsi üçün ortaq resurs istifadəsi hansı modelə uyğundur?
+A. Oxşar akademik missiyaları və şəbəkə ehtiyacları olduğu üçün İcma buludu modelinə
+B. Hər bir tələbənin evində quraşdırılan fərdi və kiçik server sistemləri modelinə
+C. İnternetdən tamamilə təcrid olunmuş və heç bir kənar çıxışı olmayan qapalı qutuya
+D. Şəbəkə kabellərinin hər bir tələbənin çantasına fiziki olaraq bağlanması qaydasına
+ANSWER: A
+
+Yerləşdirmə modellərində "Agility" (Çeviklik) anlayışı nə üçün vacib hesab olunur?
+A. Yeni biznes ideyalarını və tətbiqləri dərhal test edib istifadəyə vermək üçün
+B. İşçilərin ofis daxilində daha sürətli qaçması və idman etməsi üçün nəzərdə tutulur
+C. Serverlərin üzərindəki tozların xüsusi aparatlarla saniyə daxilində təmizlənməsi işi
+D. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat verilməsi üçün
+ANSWER: A
+
+Virtualizasiya texnologiyasının bulud hesablamalarında əsas rolu nədən ibarətdir?
+A. Şəbəkə sürətini süni şəkildə artırmaq üçün istifadə edilən xidmət növü
+B. Fiziki resursları abstraksiya edərək onların səmərəli bölünməsini təmin etmək
+C. Kompüterin monitorundakı piksellərin sayını proqram vasitəsilə artırmaq işi
+D. Serverlərin yerləşdiyi otağın divarlarının hər il yenidən rənglənməsi prosesi
+E. Bütün proqramların lisenziyalarının disk vasitəsilə arxivlərdə saxlanılması
+ANSWER: B
+
+Type 1 (Bare-metal) hipervizorlar harada quraşdırılır və necə fəaliyyət göstərir?
+A. Ümumi təyinatlı əməliyyat sisteminin (məs. Windows) üzərində bir tətbiq kimi
+B. Birbaşa fiziki avadanlığın (hardware) üzərində, əməliyyat sistemi olmadan
+C. Yalnız mobil telefonların daxili yaddaş kartlarının içində olan gizli fayl kimi
+D. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün nəzərdə tutulan alət kimi
+E. Server otağındakı generatorların işləmə rejiminə nəzarət edən proqram kimi
+ANSWER: B
+
+Type 2 (Hosted) hipervizorunun Type 1-dən əsas fərqləndirici xüsusiyyəti nədir?
+A. Fiziki serverin enerjisini kəsmədən onun daxili hissələrini təmizləmək imkanı
+B. Virtual maşınların sayını mütləq şəkildə yalnız bir ədəd ilə məhdudlaşdırması
+C. Mövcud olan əsas əməliyyat sisteminin daxilində bir proqram kimi işləməsi
+D. Şəbəkə kabellərinin rənginə görə internet sürətini avtomatik tənzimləməsi işi
+E. Prosessorun daxili tezliyini yalnız oyunlar üçün maksimum səviyyəyə qaldırması
+ANSWER: C
+
+Server virtualizasiyası (Server Virtualization) müəssisələrə hansı faydanı verir?
+A. Bir fiziki serverdə bir neçə müstəqil virtual maşının eyni anda işləməsini
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətməyi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsini
+D. Klaviaturadakı düymələrin sıradan çıxma müddətini saniyələr daxilində ölçməyi
+E. Data mərkəzindəki mühəndislərin maaşlarını avtomatik olaraq hesablamaq işini
+ANSWER: A
+
+"Storage Virtualization" (Yaddaş virtualizasiyası) texniki olaraq nəyi ifadə edir?
+A. Çoxsaylı fiziki yaddaş qurğularının vahid bir məntiqi hovuz kimi idarə olunmasını
+B. Faylların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydasını
+C. Disklərin fiziki ölçüsünün xüsusi alətlər vasitəsilə hər ay böyüdülməsi prosesini
+D. İnternet üzərindən yüklənən şəkillərin rənglərinin avtomatik olaraq dəyişdirilməsini
+E. Serverlərin yaddaşındakı məlumatların yalnız bir dəfə oxunması texniki xətasını
+ANSWER: A
+
+Virtual Maşının (VM) həyat dövründə "Provisioning" mərhələsi nəyi nəzərdə tutur?
+A. Virtual maşın üçün lazımi resursların (CPU, RAM, Disk) ayrılması və yaradılmasını
+B. Maşının tamamilə sıradan çıxaraq bütün məlumatların bazadan dərhal silinməsini
+C. Prosessorun temperaturunun hər dəqiqə istifadəçiyə bildiriş kimi göndərilməsi işi
+D. Virtual maşının daxilindəki faylların yalnız əlifba sırası ilə düzülməsi qaydasını
+E. Şəbəkəyə qoşulan cihazların markasının provayder tərəfindən yoxlanılması prosesini
+ANSWER: A
+
+VM lifecycle daxilində "Migration" (Köçürmə) prosesi nə üçün həyata keçirilir?
+A. Virtual maşının bir fiziki hostdan digərinə kəsintisiz olaraq daşınması üçün
+B. İstifadəçi şifrələrinin hər həftə sonu mütləq başqa bir serverə kopyalanması üçün
+C. Server otağındakı mebellərin yerinin hər ay mühəndislər tərəfindən dəyişməsi üçün
+D. İnternet sürətinin proqram vasitəsilə yalnız gecə saatlarında artırılması məqsədilə
+E. Kompüter monitorlarının rənglərinin tələbə tərəfindən bəyənilməsi üçün edilən iş
+ANSWER: A
+
+Virtualizasiyada "Hypervisor" (VMM) termininin tam açılışı və funksiyası nədir?
+A. Şəbəkə trafikini ölçən və istifadəçilərə aylıq hesabat təqdim edən kiçik cihaz
+B. Virtual maşınların yaradılmasını və resurs bölgüsünü idarə edən proqram qatı
+C. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi
+D. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün alət
+E. Klaviatura və siçan vasitəsilə bir neçə monitoru eyni vaxtda idarə edən mexanizm
+ANSWER: B
+
+"Snapshot" texnologiyasının virtualizasiyada əsas tətbiq sahəsi hansıdır?
+A. Virtual maşının müəyyən zamandakı vəziyyətini yadda saxlayıb geri qayıtmaq üçün
+B. Data mərkəzinə daxil olan mühəndislərin fotoşəkillərini çəkib bazada saxlamaq üçün
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək məqsədilə
+E. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək üçün
+ANSWER: A
+
+VM lifecycle-ın "Decommissioning" (İstifadədən çıxarma) mərhələsində nə baş verir?
+A. Virtual maşın birdəfəlik silinir və onun tutduğu bütün resurslar hovuza qaytarılır
+B. Maşının daxilindəki prosessorun gücü avtomatik olaraq iki dəfə artırılaraq saxlanır
+C. İnternet bağlantısı kəsildiyi zaman bütün məlumatlar mütləq buluda kopyalanır
+D. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyalar avtomatik alınır
+E. Server otağındakı işıqların rəngi maşının silindiyini bildirmək üçün qırmızı olur
+ANSWER: A
+
+Sosinsky-ə görə "Full Virtualization" (Tam virtualizasiya) modelinin əsas üstünlüyü nədir?
+A. Qonaq əməliyyat sisteminin (Guest OS) dəyişdirilmədən hipervizor üzərində işləməsi
+B. Şəbəkə kabellərinin mütləq şəkildə həm fiber, həm də mis materialdan olması tələbi
+C. Serverlərin yerləşdiyi otağın həm soyuq, həm də isti hava ilə təmin edilməsi qaydası
+D. İstifadəçilərin həm kompüter, həm də yazı makinasından eyni vaxtda yararlanması işi
+E. Bütün dünyadakı serverlərin eyni vaxtda mütləq şəkildə bir-birinə kopyalanması halı
+ANSWER: A
+
+"Para-virtualization" texnologiyasında Qonaq ƏS (Guest OS) hansı xüsusiyyətə malik olur?
+A. Hipervizorla əlaqə qurmaq üçün onun nüvə (kernel) kodunda müəyyən dəyişiklik edilir
+B. Əməliyyat sistemi özünü fiziki avadanlıq daxilində tək bir istifadəçi kimi hiss edir
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə verir
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirir
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaldır işi
+ANSWER: A
+
+VMware ESXi və Microsoft Hyper-V (Bare-metal) hansı növ hipervizora aiddir?
+A. Yalnız ofis daxilindəki istifadəçilər üçün nəzərdə tutulan kiçik Type 2 hipervizorlar
+B. Fiziki avadanlıq üzərində birbaşa işləyən yüksək performanslı Type 1 hipervizorlar
+C. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün istifadə olunan daxili tətbiqlər
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqramlar
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: B
+
+"Hardware Abstraction Layer" (HAL) virtualizasiya mühitində hansı vəzifəni yerinə yetirir?
+A. Proqram təminatı ilə fiziki avadanlıq arasında əlaqəni təmin edən aralıq qat rolunu
+B. Mağazada satılan kompüterlərin qiymətini hər gün avtomatik olaraq yeniləyən sayt
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm seti
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram işi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+VM lifecycle-ın "Maintenance" (Baxım) mərhələsində adətən hansı işlər görülür?
+A. Virtual maşının təhlükəsizlik yenilənmələrinin aparılması və performansın ölçülməsi
+B. Şirkətin ofis binasının ölçüsünün genişləndirilməsi barədə rəsmi qərarın verilməsi
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayının azaldılması
+D. Serverlərin üzərindəki düymələrin rəngini hər gün fərqli bir rəngə boyamaq işi
+E. Virtual maşınların daxilindəki faylların yalnız şəkillərdən ibarət olmasını yoxlamaq
+ANSWER: A
+
+"Guest OS" (Qonaq Əməliyyat Sistemi) virtualizasiya arxitekturasında harada yerləşir?
+A. Fiziki serverin BIOS yaddaşının ən gizli və əlçatmaz olan texniki bölməsi daxilində
+B. Hipervizor tərəfindən yaradılmış virtual maşının (VM) daxili mühiti daxilində
+C. İnternet provayderinin mərkəzi ofisində yerləşən ən güclü serverin operativ yaddaşında
+D. Kompüterin monitorunun arxa hissəsində yerləşən kiçik bir çip daxilində olan proqram
+E. Data mərkəzindəki generatorların yanacaq miqdarını ölçən rəqəmsal idarəetmə panelində
+ANSWER: B
+
+Virtualizasiya zamanı "Over-provisioning" (Həddindən artıq ayırma) nəyə yol aça bilər?
+A. Fiziki resursların (məs. RAM) çatışmazlığına və sistemin performansının düşməsinə
+B. İnternet sürətinin proqram vasitəsilə mütləq şəkildə iki dəfə artırılması imkanına
+C. Serverlərin yerləşdiyi otağın daha sərin və təmiz qalmasına kömək edən texniki amil
+D. İstifadəçilərin sayını mütləq şəkildə sabit saxlamaq üçün görülən mühüm təhlükəsizlik tədbiri
+E. Şəbəkə kabellərinin mütləq şəkildə yaşıl rəngli kabellərlə əvəz edilməsi zərurətinə
+ANSWER: A
+
+Erl-ə görə "Network Virtualization" (Şəbəkə virtualizasiyası) hansı imkanı yaradır?
+A. Fiziki şəbəkə resurslarını proqram təminatı ilə idarə olunan virtual şəbəkələrə bölməyi
+B. İnternet provayderinin bütün dünyadakı müştərilərini eyni vaxtda bir şəbəkədə görməyi
+C. Kompüterlərin daxili hissələrini proqram vasitəsilə təmizləməyi təmin edən texnika növü
+D. Şəbəkəyə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün olan mexanizm
+E. Server otağındakı işıqların monitor parlaqlığına görə avtomatik söndürülməsi qaydasını
+ANSWER: A
+
+"Resource Isolation" (Resursların təcrid olunması) prinsipi nə üçün vacibdir?
+A. Bir virtual maşındakı xətanın və ya yüklənmənin digər VM-lərə təsir etməməsi üçün
+B. İstifadəçilərin yalnız eyni marka kompüterlərdən istifadə etməsini təmin etmək üçün
+C. Şirkətin daxili yazışmalarının yalnız kağız üzərində aparılmasını mütləq tələb etmək
+D. İnternet bağlantısı kəsildiyi zaman bütün məlumatların avtomatik silinməsini önləmək
+E. Serverlərin daxilindəki tozların mərkəzləşdirilmiş qaydada bir yerə yığılması prosesi
+ANSWER: A
+
+Oracle VirtualBox və VMware Workstation hansı tip hipervizorlara ən yaxşı nümunədir?
+A. Fərdi istifadə üçün nəzərdə tutulan və ƏS üzərində işləyən Type 2 hipervizorlar
+B. Böyük data mərkəzlərində birbaşa hardware üzərində işləyən Type 1 sistemlər
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühiti
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqramlar
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: A
+
+VM lifecycle-ın "Archiving" (Arxivləşdirmə) mərhələsinin əsas məqsədi nədir?
+A. İstifadə olunmayan, lakin saxlanması vacib olan VM-ləri disk sahəsinə qənaət üçün sıxmaq
+B. Virtual maşınların daxilindəki şəkillərin rənglərini avtomatik olaraq ağ-qara rəngə salmaq
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli bildiriş vermək
+D. Serverlərin yerləşdiyi otağın divarlarına mütəmadi olaraq köhnə qəzetləri yapışdırmaq işi
+E. Prosessorun daxili tezliyini hər il mütləq şəkildə iki dəfə aşağı salmaq üçün edilən proses
+ANSWER: A
+
+Virtualizasiyada "Cloning" (Klonlaşdırma) əməliyyatı necə icra edilir?
+A. Mövcud bir virtual maşının tam eynisinin (nüsxəsinin) sürətlə yaradılması vasitəsilə
+B. Serverin fiziki detallarının mühəndis tərəfindən sökülərək yenisi ilə əvəz edilməsi ilə
+C. İnternet sürətinin proqram vasitəsilə süni şəkildə saniyələr daxilində iki dəfə artırılması ilə
+D. Şirkət rəhbərliyinin hər bir işçi üçün fərdi bir bulud provayderi seçməsi qərarı ilə
+E. Klaviatura düymələrinin rənginin proqram təminatı ilə eyni rəngə boyanması texnikası ilə
+ANSWER: A
+
+"Hardware-assisted Virtualization" texnologiyası hansı komponentin dəstəyi ilə işləyir?
+A. Prosessorun (CPU) daxili virtualizasiya komandaları (Intel VT-x və ya AMD-V) vasitəsilə
+B. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi yolu ilə
+C. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə verdiyi əmrlərlə
+D. Kompüterin monitorundakı piksəllərin sayını hər saniyə dəyişən mürəkkəb proqramla
+E. Data mərkəzindəki soyuducu ventilyatorların fırlanma sürətini ölçən daxili rəqəmsal cihaz
+ANSWER: A
+
+VM lifecycle daxilində "Start/Stop" əməliyyatları resurslara necə təsir edir?
+A. Maşın dayandırıldıqda (Stop) prosessor və RAM azad olur, lakin disk sahəsi saxlanılır
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür faktı
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz şəkildə silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+Virtualizasiya mühitində "Fault Tolerance" (Xətalara dözümlülük) nəyi ifadə edir?
+A. Bir host sıradan çıxdıqda VM-lərin dərhal digər hostda kəsintisiz işə davam etməsini
+B. İstifadəçi şifrəsini üç dəfə səhv yazdıqda sistemin avtomatik olaraq tamamilə bağlanmasını
+C. Şəbəkə kabellərinin bir-birinə dolaşması halında internet sürətinin artırılması texnikası
+D. Serverlərin yerləşdiyi binanın pəncərələrinin mütləq şəkildə qapalı saxlanılması tələbini
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesini
+ANSWER: A
+
+Data mərkəzi dizaynında "Tier" (Səviyyə) standartları əsasən hansı parametri ölçür?
+A. Serverlərin daxili prosessorlarının istehsal ilini və texniki modelini
+B. İnfrastrukturun əlçatanlıq dərəcəsini və xətalara qarşı dözümlülük səviyyəsini
+C. Şəbəkə kabellərinin rənginin proqram təminatına göstərdiyi vizual təsirini
+D. Data mərkəzində çalışan işçilərin sayını və onların orta aylıq maaşını
+E. Server otağındakı divar kağızlarının dizaynını və otağın ümumi sahəsini
+ANSWER: B
+
+Bulud infrastrukturunda "Blade Server" arxitekturasının əsas üstünlüyü nədir?
+A. Məkan və enerji səmərəliliyi təmin edərək sıx yerləşmə imkanı yaratması
+B. Hər bir serverin mütləq şəkildə ayrı bir binada yerləşdirilməsi zərurəti
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə iki dəfə artırılması
+D. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan mexaniki filtr
+E. Klaviatura və siçan vasitəsilə eyni vaxtda minlərlə ekranı idarə etmək işi
+ANSWER: A
+
+"Storage Area Network" (SAN) sisteminin NAS-dan fundamental texniki fərqi nədir?
+A. Məlumatları fayl səviyyəsində deyil, blok səviyyəsində yüksək sürətlə ötürməsi
+B. Yalnız kiçik ofislər üçün nəzərdə tutulan və ucuz disklərdən ibarət olması
+C. İnternet bağlantısı olmadan məlumatların fiziki olaraq çap edilməsi qaydası
+D. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili alət
+E. Server otağındakı generatorların yanacaq miqdarını ölçən rəqəmsal panel
+ANSWER: A
+
+Data mərkəzlərində "PUE" (Power Usage Effectiveness) göstəricisi nəyi ifadə edir?
+A. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması tələbini
+B. Mərkəzin ümumi enerji sərfiyyatının İT avadanlıqlarına olan nisbətini
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının ümumi sayı
+D. Serverlərin yerləşdiyi otağın rütubət səviyyəsinin həmişə sabit saxlanılması
+E. Kompüter monitorlarının parlaqlığını ətrafdakı işığa görə tənzimləyən kod
+ANSWER: B
+
+"Top-of-Rack" (ToR) şəbəkə dizaynı data mərkəzində necə tətbiq olunur?
+A. Şəbəkə kommutatorunun hər bir server şkafının yuxarı hissəsində yerləşməsi ilə
+B. İnternet kabellərinin binanın damından birbaşa serverlərə birləşdirilməsi ilə
+C. Serverlərin daxili hissələrinin tozlanmasını önləyən xüsusi təmizlik rejimi ilə
+D. Proqram təminatının interfeysindəki düymələrin rəngini dəyişən daxili sistemlə
+E. Data mərkəzinə giriş üçün mütləq şəkildə xüsusi idman formasının geyilməsi ilə
+ANSWER: A
+
+"Network Attached Storage" (NAS) sistemi buludda hansı məqsədlə istifadə olunur?
+A. Şirkət işçilərinin gün ərzində içdikləri suyun miqdarını ölçmək üçün cihaz
+B. Məlumatların fayl səviyyəsində paylaşılması və mərkəzləşmiş arxivləşdirilməsi üçün
+C. İnternet sürətinin proqram vasitəsilə saniyələr daxilində süni artırılması işi
+D. Serverlərin yerləşdiyi otağın divarlarını rəngləmək üçün istifadə olunan alət
+E. Prosessorun daxili tezliyini hər il mütləq şəkildə iki dəfə aşağı salan proses
+ANSWER: B
+
+Data mərkəzində "Hot Aisle / Cold Aisle" konsepti hansı problemi həll edir?
+A. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikməni
+B. Serverlərin soyudulması üçün hava axınını tənzimləyərək səmərəliliyi artırır
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatı
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsini
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsini
+ANSWER: B
+
+"Direct Attached Storage" (DAS) sisteminin digər storage növlərindən əsas fərqi nədir?
+A. Yaddaş qurğusunun birbaşa serverə fiziki kabel vasitəsilə qoşulmuş olması
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə idarəsi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd
+ANSWER: A
+
+Erl-ə görə bulud infrastrukturunda "Resource Replication" nə üçün lazımdır?
+A. Resursların kopyasını yaradaraq əlçatanlığı və dözümlülüyü təmin etmək üçün
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq
+ANSWER: A
+
+Buludun şəbəkə infrastrukturunda "Latency" (Gecikmə) anlayışı nəyi ifadə edir?
+A. Məlumat paketinin bir nöqtədən digərinə çatması üçün keçən zaman müddətini
+B. Serverlərin yerləşdiyi otağın divarlarının rənginin mütəmadi olaraq solması halı
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və boyanması
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı
+ANSWER: A
+
+"Software-Defined Storage" (SDS) texnologiyasının əsas fərqləndirici cəhəti nədir?
+A. Yaddaşın idarəetmə funksiyasının fiziki avadanlıqdan proqram səviyyəsinə keçməsi
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaldır
+ANSWER: A
+
+Data mərkəzi infrastrukturunda "UPS" cihazının funksiyası hansı bənddə düzgün verilib?
+A. Elektrik kəsilməsi zamanı serverləri qısa müddətli enerji ilə təmin etmək
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək
+ANSWER: A
+
+Sosinsky-ə görə "Fiber Channel" (FC) protokolu ən çox harada tətbiq olunur?
+A. SAN şəbəkələrində məlumatların yüksək sürətlə və etibarlı şəkildə ötürülməsində
+B. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühitində
+C. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün istifadə olunan kiçik tətbiq
+D. Serverlərin daxili hissələrini proqram vasitəsilə təmizləməyi təmin edən texnika
+E. Şəbəkəyə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün mexanizm
+ANSWER: A
+
+"Hyper-converged Infrastructure" (HCI) dizaynının təməl xüsusiyyəti nədən ibarətdir?
+A. Hesablama, yaddaş və şəbəkə resurslarının vahid bir sistemdə birləşməsi
+B. Şəbəkə kabellərinin mütləq şəkildə həm fiber, həm də mis materialdan olması işi
+C. Serverlərin yerləşdiyi otağın həm soyuq, həm də isti hava ilə təmin edilməsi qaydası
+D. İstifadəçilərin həm kompüter, həm də yazı makinasından eyni vaxtda yararlanması
+E. Bütün dünyadakı serverlərin eyni vaxtda mütləq şəkildə bir-birinə kopyalanması halı
+ANSWER: A
+
+Data mərkəzlərində "Redundancy" (Artıqlıq) prinsipi nə üçün kritik hesab olunur?
+A. Hər hansı komponent sıradan çıxdıqda ehtiyat sistemin dərhal işə düşməsi üçün
+B. İşçilərin ofis daxilində daha sürətli qaçması və idman etməsi üçün nəzərdə tutulur
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat verilməsi işi
+D. Serverlərin üzərindəki tozların xüsusi aparatlarla saniyə daxilində təmizlənməsi
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal qırmızı rəngə çevrilməsi
+ANSWER: A
+
+Bulud infrastrukturunda "Scale-out" (Üfüqi miqyaslanma) necə həyata keçirilir?
+A. Mövcud sistemə daha çox sayda yeni serverlərin (node) əlavə edilməsi vasitəsilə
+B. Serverlərin yerləşdiyi otağın rütubət səviyyəsinin həmişə sabit saxlanılması işi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi
+D. Klaviaturadakı düymələrin sıradan çıxma müddətini saniyələr daxilində ölçməyi
+E. Prosessorun daxili tezliyini yalnız oyunlar üçün maksimum səviyyəyə qaldırması
+ANSWER: A
+
+"Object Storage" texnologiyasının ənənəvi sistemlərdən fərqləndirici cəhəti nədir?
+A. Məlumatların iyerarxik qovluqlar yerinə, metadata ilə birlikdə obyektdə saxlanması
+B. Faylların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası işi
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə hər saat başı sınaqdan keçməsi
+D. Şirkət işçilərinin hamısının mütləq şəkildə eyni marka mobil telefondan istifadəsi
+E. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+ANSWER: A
+
+Data mərkəzi infrastrukturunda "Load Balancer" qurğusunun əsas vəzifəsi nədir?
+A. Gələn şəbəkə trafikini bir neçə server arasında bərabər şəkildə paylamaq
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyalar avtomatik almaq
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək
+ANSWER: A
+
+"Tier III" səviyyəli bir data mərkəzi ildə maksimum nə qədər kəsinti yaşaya bilər?
+A. Təxminən 1.6 saat (99.98% əlçatanlıq səviyyəsi təmin olunduğu halda)
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün deyildir
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftə
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqə
+ANSWER: A
+
+Erl-ə görə "Logical Network Perimeter" buludda hansı funksiyanı yerinə yetirir?
+A. Bulud resurslarını kənar şəbəkələrdən ayıran virtual təhlükəsizlik sərhədini
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətməyi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi
+ANSWER: A
+
+"Inter-cloud" şəbəkə infrastrukturu dedikdə Sosinsky nəyi nəzərdə tutur?
+A. Müxtəlif bulud provayderlərinin infrastrukturları arasında olan əlaqəni
+B. Şirkət rəhbərliyinin hər gün serverləri əllə təmizləməsi barədə olan daxili əmri
+C. İnternet sürətinin yalnız mühəndislər tərəfindən səsli komanda ilə artırılması
+D. Serverlərin yerləşdiyi binaların hər ay başqa bir şəhərə köçürülməsi prosesi
+E. Proqram təminatının interfeysindəki düymələrin sayını proqram vasitəsilə artırmaq
+ANSWER: A
+
+Data mərkəzində "Structured Cabling" (Strukturlaşdırılmış kabelləmə) niyə lazımdır?
+A. Kabellərin idarə olunmasını asanlaşdırmaq və texniki xətaları minimuma endirmək
+B. Serverlərin çəkisinin ümumi tonla ifadə edilən fiziki göstəricisini ölçmək üçün
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artırmaq
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd
+ANSWER: A
+
+"Backbone Network" bulud infrastrukturunda hansı rolu oynayır?
+A. Data mərkəzləri arasında yüksək sürətli məlumat ötürülməsini təmin edən əsas magistral
+B. Mağazada satılan kompüterlərin qiymətini hər gün avtomatik olaraq yeniləyən sayt
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm seti
+D. Server otağındakı mühəndislərin istirahət vaxtlarını müəyyən edən daxili cədvəl
+E. Şəbəkə kabellərinin mütləq şəkildə yaşıl rəngli kabellərlə əvəz edilməsi zərurəti
+ANSWER: A
+
+Data mərkəzi dizaynında "RAID" texnologiyasının istifadə məqsədi nədir?
+A. Disk xətalarına qarşı dözümlülüyü artırmaq və məlumat itkisinin qarşısını almaq
+B. Şirkət işçilərinin gün ərzində işlətdiyi kağızların sayını mərkəzi bazada qeyd etmək
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə iki dəfə artırılması imkanı
+D. Serverlərin yerləşdiyi otağın havasını hər on dəqiqədən bir avtomatik dəyişmək
+E. Kompüter monitorlarının rənglərinin tələbə tərəfindən bəyənilməsi üçün edilən iş
+ANSWER: A
+
+"Converged Infrastructure" (Birləşmiş infrastruktur) modelinin əsas hədəfi nədir?
+A. Server, storage və şəbəkə avadanlıqlarını vahid və optimallaşdırılmış paketdə təqdim etmək
+B. Şirkətin ofis binasının ölçüsünün genişləndirilməsi barədə rəsmi qərarın verilməsi işi
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını mütləq azaldılması
+D. Serverlərin üzərindəki düymələrin rəngini hər gün fərqli bir rəngə boyamaq prosesi
+E. Virtual maşınların daxilindəki faylların yalnız şəkillərdən ibarət olmasını yoxlamaq
+ANSWER: A
+
+Bulud provayderlərinin arxitekturasında "Region" anlayışı nəyi ifadə edir?
+A. Dünyanın müəyyən bir coğrafi ərazisində yerləşən data mərkəzləri qrupunu
+B. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlandığı kiçik otağı
+C. İnternet provayderinin müştəriyə verdiyi illik endirim kuponlarının siyahısını
+D. Serverlərin yerləşdiyi otağın divarlarının rənginə görə ayrılmış daxili zonanı
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatını
+ANSWER: A
+
+AWS arxitekturasında "Availability Zone" (AZ) nə üçün istifadə olunur?
+A. Xətalara qarşı dözümlülüyü artırmaq üçün bir-birindən izolyasiya olunmuş mərkəz kimi
+B. Şirkət rəhbərliyinin hər gün serverləri əllə təmizləməsi barədə olan daxili əmri üçün
+C. İnternet sürətinin yalnız mühəndislər tərəfindən səsli komanda ilə artırılması işi üçün
+D. Serverlərin yerləşdiyi binaların hər ay başqa bir şəhərə köçürülməsi prosesi üçün
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmaq üçün
+ANSWER: A
+
+Microsoft Azure arxitekturasında "Resource Group" anlayışının əsas funksiyası nədir?
+A. Əlaqəli bulud resurslarını vahid bir məntiqi konteynerdə qruplaşdırmaq və idarə etmək
+B. Mağazada satılan kompüterlərin qiymətini hər gün avtomatik olaraq yeniləyən veb sayt
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemi
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi nəzarət proqramı
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Google Cloud Platform (GCP) modelində "Project" (Layihə) nə üçün təməl vahid sayılır?
+A. Bütün resursların, istifadəçi icazələrinin və hesablaşmaların buna bağlı olduğu üçün
+B. Serverlərin çəkisinin ümumi tonla ifadə edilən fiziki göstəricisini ölçmək üçün vacibdir
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını mütləq artırdığı üçün
+D. Server otağındakı mühəndislərin istirahət vaxtlarını müəyyən edən daxili cədvəl olduğu üçün
+E. Şəbəkə kabellərinin mütləq şəkildə yaşıl rəngli kabellərlə əvəz edilməsi zərurəti üçün
+ANSWER: A
+
+AWS infrastrukturunda "Edge Location" məntəqələri hansı məqsədlə qurulur?
+A. Məzmunun (Content) istifadəçilərə daha yaxın və sürətli ötürülməsini təmin etmək üçün
+B. Şirkət işçilərinin gün ərzində işlətdiyi kağızların sayını mərkəzi bazada qeyd etmək üçün
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə iki dəfə artırılması imkanı üçün
+D. Serverlərin yerləşdiyi otağın havasını hər on dəqiqədən bir avtomatik dəyişmək üçün
+E. Kompüter monitorlarının rənglərinin tələbə tərəfindən bəyənilməsi üçün edilən iş üçün
+ANSWER: A
+
+Azure "Availability Sets" texnologiyasının tətbiqi nəyə xidmət edir?
+A. Virtual maşınların eyni vaxtda texniki nasazlıqdan sıradan çıxmasının qarşısını almağa
+B. Şirkətin ofis binasının ölçüsünün genişləndirilməsi barədə rəsmi qərarın verilməsi işinə
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını mütləq azaldılmasına
+D. Serverlərin üzərindəki düymələrin rəngini hər gün fərqli bir rəngə boyamaq prosesinə
+E. Virtual maşınların daxilindəki faylların yalnız şəkillərdən ibarət olmasını yoxlamağa
+ANSWER: A
+
+GCP-də "Global" resurslar dedikdə Sosinsky-ə görə hansı xidmətlər nəzərdə tutulur?
+A. Bütün regionlar üzrə əlçatan olan və mərkəzləşmiş şəkildə idarə edilən xidmətlər
+B. Yalnız kiçik kəndlərdə istifadə olunan və internet bağlantısı tələb etməyən proqramlar
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə hər saat başı sınaqdan keçməsi işi
+D. Şirkət işçilərinin hamısının mütləq şəkildə eyni marka mobil telefondan istifadəsi halı
+E. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+ANSWER: A
+
+AWS "Virtual Private Cloud" (VPC) bölməsində "Subnet" nə üçün lazımdır?
+A. Şəbəkəni daha kiçik və idarə olunan alt hissələrə (ictimai və ya özəl) bölmək üçün
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyalar avtomatik almaq üçün
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac üçün
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək üçün
+ANSWER: A
+
+Azure "Management Groups" iyerarxiyası hansı miqyaslı təşkilatlar üçün nəzərdə tutulub?
+A. Bir neçə abunəliyi (Subscription) mərkəzi qaydada idarə etmək istəyən iri şirkətlər üçün
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan şirkətlər
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müəssisələr
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik müddət
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik zaman
+ANSWER: A
+
+GCP infrastrukturunda "Zones" anlayışı AWS-dəki hansı anlayışa ekvivalentdir?
+A. AWS regionları daxilində yerləşən müstəqil "Availability Zones" (AZ) anlayışına
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətməyə
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsinə
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işinə
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işinə
+ANSWER: A
+
+AWS "Elastic Beanstalk" xidmətinin arxitektura baxımından əsas rolu nədir?
+A. İnfrastruktur idarəsini avtomatlaşdıraraq tətbiqləri sürətlə yerləşdirməyə kömək etmək
+B. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi kimi
+C. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün alət kimi
+D. Klaviatura və siçan vasitəsilə bir neçə monitoru eyni vaxtda idarə edən mexanizm
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: A
+
+Azure "App Service" hansı bulud xidmət modelinin arxitekturasına uyğun gəlir?
+A. Veb tətbiqləri üçün nəzərdə tutulmuş platforma xidmət modelinə (PaaS)
+B. Fiziki avadanlığın birbaşa icarəyə verilməsi barədə olan IaaS modelinə
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan əyləncə mühitinə
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən proqrama
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili alətə
+ANSWER: A
+
+"Global Infrastructure" xəritəsində "Latency" problemini həll etmək üçün nə edilir?
+A. Resurslar istifadəçilərə coğrafi cəhətdən ən yaxın olan regionlarda yerləşdirilir
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+AWS-də "S3" (Simple Storage Service) arxitekturası məlumatları necə saxlayır?
+A. Coğrafi olaraq fərqli AZ-larda avtomatik nüsxələr (replicas) yaradaraq obyekt şəklində
+B. Yalnız ofis daxilindəki istifadəçilər üçün nəzərdə tutulan kiçik Type 2 hipervizorda
+C. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün istifadə olunan daxili tətbiqdə
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqramda
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma alətində
+ANSWER: A
+
+Azure "Virtual Network" (VNet) və AWS "VPC" arasındakı oxşarlıq nədən ibarətdir?
+A. Hər ikisi müştəri üçün buludda izolyasiya olunmuş özəl şəbəkə mühiti yaradır
+B. Hər ikisi serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçür
+C. Hər ikisi internet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artırır
+D. Hər ikisi server otağındakı mühəndislərin geyim formasına nəzarət edən proqramdır
+E. Hər ikisi şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən sənəddir
+ANSWER: A
+
+"Cloud Architecture" dizaynında "Loose Coupling" prinsipi nəyi ifadə edir?
+A. Sistem komponentlərinin bir-birindən asılılığının minimuma endirilməsini
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikməni
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatını
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsini
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsini
+ANSWER: A
+
+GCP-də "Preemptible VMs" arxitektura baxımından nə üçün istifadə edilir?
+A. Qısamüddətli işlər üçün daha ucuz, lakin provayder tərəfindən dayandırıla bilən resurs
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemi
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Sosinsky-ə görə bulud platformalarında "IAM" (Identity and Access Management) rolu nədir?
+A. Resurslara giriş icazələrini və istifadəçi şəxsiyyətlərini təhlükəsiz idarə etmək
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram üçün
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün
+ANSWER: A
+
+Azure "Regions" və "Zonal" resurslar arasındakı fərq hansı bənddə düzgün verilib?
+A. Zonal resurslar konkret bir AZ-a bağlıdır, regional resurslar isə bütün regiona yayılır
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+AWS "Lambda" xidməti hansı arxitektura modelinə (Serverless) nümunədir?
+A. Müştərinin server idarə etmədiyi, yalnız kodun icra olunduğu arxitekturaya
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydasına
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazəyə
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirməyə
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmağa
+ANSWER: A
+
+GCP "Cloud Storage" sinifləri (Standard, Nearline, Coldline) nəyə görə fərqlənir?
+A. Məlumatlara giriş tezliyinə və saxlama müddətinin iqtisadi xərclərinə görə
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almağa görə
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğaca görə
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işinə görə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişməyə görə
+ANSWER: A
+
+AWS-də "Shared Responsibility Model" arxitekturada nəyi müəyyən edir?
+A. Provayderin buludun təhlükəsizliyinə, müştərinin isə bulud daxilindəki təhlükəsizliyə cavabdehliyini
+B. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühitini
+C. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün istifadə olunan kiçik tətbiqi
+D. Serverlərin daxili hissələrini proqram vasitəsilə tənzimləməyi təmin edən texnikanı
+E. Şəbəkəyə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün mexanizmi
+ANSWER: A
+
+Azure "Cosmos DB" xidmətinin qlobal arxitektura üstünlüyü nədən ibarətdir?
+A. Məlumatların bütün dünya üzrə aşağı gecikmə ilə paylanmasını (Global Distribution) təmin etməsi
+B. Şəbəkə kabellərinin mütləq şəkildə həm fiber, həm də mis materialdan olması tələbi
+C. Serverlərin yerləşdiyi otağın həm soyuq, həm də isti hava ilə təmin edilməsi qaydası
+D. İstifadəçilərin həm kompüter, həm də yazı makinasından eyni vaxtda yararlanması işi
+E. Bütün dünyadakı serverlərin eyni vaxtda mütləq şəkildə bir-birinə kopyalanması halı
+ANSWER: A
+
+Bulud arxitekturasında "Disaster Recovery" planı üçün hansı strateji seçim daha etibarlıdır?
+A. Kritik tətbiqləri və məlumatları bir-birindən uzaq iki fərqli regionda yerləşdirmək
+B. İşçilərin ofis daxilində daha sürətli qaçması və idman etməsi üçün nəzərdə tutulan plan
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat verilməsi prosesi
+D. Serverlərin üzərindəki tozların xüsusi aparatlarla saniyə daxilində təmizlənməsi işi
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal qırmızı rəngə çevrilməsi prosesi
+ANSWER: A
+
+GCP "Load Balancing" xidmətinin AWS-dən əsas arxitektura fərqi nədir?
+A. Trafiki qlobal səviyyədə, yəni bütün regionlar üzrə tək bir IP ilə paylaya bilməsi
+B. Serverlərin yerləşdiyi otağın rütubət səviyyəsinin həmişə sabit saxlanılması işi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi
+D. Klaviaturadakı düymələrin sıradan çıxma müddətini saniyələr daxilində ölçməyi
+E. Prosessorun daxili tezliyini yalnız oyunlar üçün maksimum səviyyəyə qaldırması
+ANSWER: A
+
+Buludda "Block Storage" texnologiyasının əsas iş prinsipi hansı bənddə düzgün izah edilib?
+A. Məlumatları fayl iyerarxiyası şəklində qovluqlarda saxlayan köhnə sistem növü
+B. Məlumatın sektorlara bölünərək fərdi ünvanlanan bloklar şəklində saxlanılması
+C. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlandığı kiçik otaq
+D. Serverlərin yerləşdiyi otağın divarlarının rənginə görə ayrılmış daxili zona
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı
+ANSWER: B
+
+"Object Storage" sistemində hər bir məlumat vahidi (obyekt) nələrdən ibarətdir?
+A. Məlumatın özü, genişləndirilmiş metadata və unikal identifikatordan (ID)
+B. Yalnız rəqəmsal şəkillərdən və onların kağız üzərindəki çap nüsxələrindən
+C. İnternet sürətini saniyə daxilində ölçən mürəkkəb riyazi düsturlar dəstindən
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən proqram kodundan
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəddən
+ANSWER: A
+
+"File Storage" (NFS və ya SMB/CIFS) sisteminin ən çox istifadə edildiyi real ssenari hansıdır?
+A. Bir neçə istifadəçinin eyni faylları paylaşaraq istifadə etdiyi ortaq qovluqlar
+B. Serverlərin çəkisinin ümumi tonla ifadə edilən fiziki göstəricisini ölçmək işi
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artırmaq
+D. Server otağındakı mühəndislərin istirahət vaxtlarını müəyyən edən daxili cədvəl
+E. Şəbəkə kabellərinin mütləq şəkildə yaşıl rəngli kabellərlə əvəz edilməsi prosesi
+ANSWER: A
+
+Sosinsky-ə görə "RAID 0" (Striping) texnologiyasının əsas mənfi cəhəti nədən ibarətdir?
+A. Heç bir artıqlıq (redundancy) təmin etməməsi və bir disk sıradan çıxdıqda bütün məlumatın itməsi
+B. Şirkət işçilərinin gün ərzində işlətdiyi kağızların sayını mərkəzi bazada qeyd etməsi
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə iki dəfə artırılması imkanı
+D. Serverləira yerləşdiyi otağın havasını hər on dəqiqədən bir avtomatik dəyişməsi
+E. Kompüter monitorlarının rənglərinin tələbə tərəfindən bəyənilməsi üçün edilən iş
+ANSWER: A
+
+"RAID 1" (Mirroring) texnologiyası məlumatların qorunmasını necə təmin edir?
+A. Məlumatların eyni nüsxəsini eyni vaxtda iki və ya daha çox diskə köçürməklə (güzəlləmə)
+B. Şirkətin ofis binasının ölçüsünün genişləndirilməsi barədə rəsmi qərarın verilməsi ilə
+ C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını mütləq azaldılması
+D. Serverlərin üzərindəki düymələrin rəngini hər gün fərqli bir rəngə boyamaq prosesi
+E. Virtual maşınların daxilindəki faylların yalnız şəkillərdən ibarət olmasını yoxlamaq
+ANSWER: A
+
+"RAID 5" sistemində "Parity" (Cütlük yoxlanışı) məlumatı nə üçün lazımdır?
+A. Bir disk sıradan çıxdıqda itmiş məlumatı digər disklər vasitəsilə bərpa etmək üçün
+B. Yalnız kiçik kəndlərdə istifadə olunan və internet bağlantısı tələb etməyən proqram
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə hər saat başı sınaqdan keçməsi
+D. Şirkət işçilərinin hamısının mütləq şəkildə eyni marka mobil telefondan istifadəsi
+E. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+ANSWER: A
+
+Buludda "Durability" (Davamlılıq) anlayışı "Availability" (Əlçatanlıq) anlayışından nə ilə fərqlənir?
+A. Davamlılıq məlumatın uzunmüddətli itməməsini, əlçatanlıq isə ona hər an girişi ifadə edir
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyalar avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac növü
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+Yaddaş sistemlərində "IOPS" (Input/Output Operations Per Second) göstəricisi nəyi ölçür?
+A. Bir saniyə ərzində yaddaş qurğusuna edilən oxuma və yazma əməliyyatlarının sayını
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan zaman
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik vaxt
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik proses
+ANSWER: A
+
+"Latency" (Gecikmə) yaddaş performansına necə təsir göstərir?
+A. Gecikmə nə qədər aşağı olarsa, məlumatın oxunma/yazılma sürəti bir o qədər yüksək olar
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətmək üçün
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi üçün
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi üçün
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi üçün
+ANSWER: A
+
+"Object Storage" sisteminin miqyaslanma (Scalability) qabiliyyəti niyə yüksək hesab olunur?
+A. İyerarxik strukturun olmaması və petabaytlarla məlumatı vahid ad sahəsində saxlamaq imkanı
+B. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi kimi
+C. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün olan alət
+D. Klaviatura və siçan vasitəsilə bir neçə monitoru eyni vaxtda idarə edən mexanizm
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: A
+
+Block storage sistemlərində "Snapshot" funksiyası hansı məqsədlə istifadə olunur?
+A. Diskdəki məlumatların müəyyən zamandakı tam vəziyyətini sürətlə nüsxələmək üçün
+B. Fiziki avadanlığın birbaşa icarəyə verilməsi barədə olan köhnə IaaS modelində istifadə
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühitində tətbiq
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki bir proqram
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qurğusu
+ANSWER: A
+
+Məlumatların saxlanmasında "Throughput" (Ötürmə qabiliyyəti) nə deməkdir?
+A. Vahid zaman ərzində ötürülən məlumatın həcmini (məsələn, MB/s və ya GB/s) ifadə edir
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+"SSD" yaddaş qurğularının "HDD" diskləri ilə müqayisədə buludda ən böyük üstünlüyü nədir?
+A. Mexaniki hissələrin olmaması və çox yüksək IOPS göstəricilərinə malik olması
+B. Serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçən yeganə cihaz
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artıran daxili kod
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram təminatı
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Məlumatların artıqlığı üçün istifadə edilən "Geo-replication" anlayışı nəyi ifadə edir?
+A. Məlumatların təbii fəlakətlərdən qorunması üçün coğrafi olaraq fərqli regionlarda saxlanması
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikmənin ölçülməsi
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatının tətbiqi
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsinin icrası
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesi
+ANSWER: A
+
+Buludda "Cold Storage" yaddaş sinfi hansı tip məlumatlar üçün daha uyğundur?
+A. Nadir hallarda müraciət olunan, lakin uzunmüddətli saxlanması vacib olan arxivlər
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemi
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+"Shared Storage" (NFS) arxitekturasında çoxsaylı müştərilər üçün giriş necə tənzimlənir?
+A. Mərkəzləşdirilmiş idarəetmə və şəbəkə protokolları (məsələn, SMB) vasitəsilə
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram üçün
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün
+ANSWER: A
+
+Yaddaş sistemində "Data Scrubbing" prosesi hansı funksiyanı yerinə yetirir?
+A. Saxlanılan məlumatlarda baş verə biləcək səssiz xətaları (bit rot) tapıb bərpa etmək
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+"RAID 10" (və ya 1+0) konfiqurasiyası hansı iki metodun birləşməsidir?
+A. RAID 1 (güzəlləmə) və RAID 0 (paylama) metodlarının yüksək performans üçün sintezi
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmağa
+ANSWER: A
+
+"Storage Tiering" texnologiyasının əsas iqtisadi məqsədi nədir?
+A. Tez-tez istifadə olunan məlumatları SSD-də, digərlərini isə ucuz HDD-də saxlamaqla xərcləri azaltmaq
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac üçün
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+"Block Storage" sistemində LUN (Logical Unit Number) anlayışı nəyi ifadə edir?
+A. Bir fiziki və ya virtual yaddaş massivindən müştəri üçün ayrılmış məntiqi disk sahəsini
+B. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühiti
+C. İnternet brauzerlərinin daxili kodlarını dəyişmək üçün istifadə olunan kiçik tətbiq
+D. Serverlərin daxili hissələrini proqram vasitəsilə tənzimləməyi təmin edən texnika
+E. Şəbəkəyə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün mexanizm
+ANSWER: A
+
+Məlumatların saxlanmasında "Encryption at Rest" nə deməkdir?
+A. Məlumatların diskdə saxlanıldığı müddətdə şiffrələnmiş vəziyyətdə olması
+B. Şəbəkə kabellərinin mütləq şəkildə həm fiber, həm də mis materialdan olması tələbi
+C. Serverlərin yerləşdiyi otağın həm soyuq, həm də isti hava ilə təmin edilməsi qaydası
+D. İstifadəçilərin həm kompüter, həm də yazı makinasından eyni vaxtda yararlanması işi
+E. Bütün dünyadakı serverlərin eyni vaxtda mütləq şəkildə bir-birinə kopyalanması halı
+ANSWER: A
+
+"Object Storage" sistemində metadata dedikdə Erl-ə görə nə nəzərdə tutulur?
+A. Məlumatın özü haqqında olan təsviri məlumatlar (məs. fayl tipi, yaranma tarixi)
+B. İşçilərin ofis daxilində daha sürətli qaçması və idman etməsi üçün nəzərdə tutulan plan
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat verilməsi prosesi
+D. Serverlərin üzərindəki tozların xüsusi aparatlarla saniyə daxilində təmizlənməsi işi
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal qırmızı rəngə çevrilməsi prosesi
+ANSWER: A
+
+RAID sistemlərində "Rebuild Time" (Bərpa vaxtı) hansı amildən asılıdır?
+A. Disk tutumunun böyüklüyündən və yaddaş sisteminin ümumi performansından
+B. Serverlərin yerləşdiyi otağın rütubət səviyyəsinin həmişə sabit saxlanılması işindən
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsindən
+D. Klaviaturadakı düymələrin sıradan çıxma müddətini saniyələr daxilində ölçməkdən
+E. Prosessorun daxili tezliyini yalnız oyunlar üçün maksimum səviyyəyə qaldırmaqdan
+ANSWER: A
+
+Buludda "EBS" (Elastic Block Store) kimi xidmətlər üçün ən mühüm performans parametri hansıdır?
+A. Aşağı gecikmə (Latency) və tənzimlənə bilən IOPS göstəricisi
+B. Faylların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə mütləq şəkildə hər saat başı sınaqdan keçməsi
+D. Şirkət işçilərinin hamısının mütləq şəkildə eyni marka mobil telefondan istifadəsi
+E. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+ANSWER: A
+
+"Redundant Array of Independent Disks" (RAID) termininin Azərbaycan dilində tam mənası nədir?
+A. Müstəqil disklərin artıqlıqlı (nüsxəli) massivi
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik alan sistem
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək üçün alət
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişən cihaz
+ANSWER: A
+
+Buludda "Virtual Private Cloud" (VPC) anlayışının əsas mahiyyəti nədən ibarətdir?
+A. İnternet provayderinin müştəriyə verdiyi illik pulsuz internet paketlərinin siyahısı
+B. Bulud provayderinin infrastrukturu daxilində müştəri üçün ayrılmış izolyasiya olunmuş şəbəkə
+C. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlandığı kiçik və qapalı otaq
+D. Serverlərin yerləşdiyi otağın divarlarının rənginə görə ayrılmış daxili texniki zona
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili rəqəmsal soyutma qatı
+ANSWER: B
+
+"Subnet" (Alt şəbəkə) anlayışı bulud şəbəkəsinin idarə edilməsində hansı rolu oynayır?
+A. Böyük bir IP şəbəkəsini daha kiçik, məntiqi və idarə olunan hissələrə bölmək imkanı verir
+B. Şirkət rəhbərliyinin hər gün serverləri əllə təmizləməsi barədə olan daxili əmri icra edir
+C. İnternet sürətinin yalnız mühəndislər tərəfindən səsli komanda ilə artırılması üçün alət
+D. Serverlərin yerləşdiyi binaların hər ay başqa bir şəhərə köçürülməsi üçün olan plan
+E. Proqram təminatının interfeysindəki düymələrin sayını proqram vasitəsilə azaltmaq işi
+ANSWER: A
+
+Buludda "Public IP" və "Private IP" ünvanları arasındakı fundamental fərq nədir?
+A. Public IP internetə çıxış üçün, Private IP isə şəbəkə daxili rabitə üçün istifadə olunur
+B. Private IP ünvanları yalnız peyk vasitəsilə işləyir, Public IP isə yalnız kabellə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq sistemi
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi qaydası
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili rəqəmsal sayğac növü
+ANSWER: A
+
+"Load Balancer" (Yük tarazlayıcı) cihazının şəbəkə arxitekturasındakı əsas funksiyası nədir?
+A. Gələn şəbəkə trafikini bir neçə server arasında bərabər paylayaraq xidmətin davamlılığını təmin etmək
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür faktı
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz şəkildə silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+Bulud şəbəkəsində "DNS" (Domain Name System) xidməti hansı vəzifəni yerinə yetirir?
+A. Kompüterlərin başa düşdüyü IP ünvanlarını insanların yadda saxladığı domen adlarına çevirir
+B. Serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçən daxili rəqəmsal cihaz
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artıran proqram kodu
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram təminatı növü
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+"Firewall" (Şəbəkə ekranı) anlayışı bulud təhlükəsizliyində nəyi ifadə edir?
+A. Müəyyən edilmiş qaydalar əsasında gələn və gedən şəbəkə trafikinə nəzarət edən sistem
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikmənin ölçülməsi
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatının tətbiqi
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsinin icrası
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesi
+ANSWER: A
+
+"Static IP" ünvanının "Dynamic IP" ünvanından əsas üstünlüyü hansı variantda qeyd olunub?
+A. Ünvanın dəyişməz qalması, bu da serverlərə və xidmətlərə sabit müraciət imkanı yaradır
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün əlverişlidir
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemidir
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi prosesi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növüdür
+ANSWER: A
+
+Sosinsky-ə görə "Virtual Network Interface" (vNIC) nəyi təmsil edir?
+A. Virtual maşının şəbəkəyə qoşulmasını təmin edən proqram təminatı əsaslı şəbəkə kartını
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün olan proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün alət
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram növü
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün vasitə
+ANSWER: A
+
+Bulud şəbəkəsində "Gateway" (Şlüz) qurğusunun əsas rolu nədən ibarətdir?
+A. İki fərqli şəbəkə (məsələn, VPC və internet) arasında məlumat mübadiləsini təmin etmək
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+"CIDR" (Classless Inter-Domain Routing) notasiyası şəbəkədə nəyi müəyyən edir?
+A. IP ünvanlarının diapazonunu və alt şəbəkə maskasını (məsələn, /24) təsvir etmək üsulu
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmaq
+ANSWER: A
+
+"Network Security Group" (NSG) bulud mühitində hansı səviyyədə trafikə nəzarət edir?
+A. Virtual maşın və ya alt şəbəkə səviyyəsində gələn və gedən paketləri süzgəcdən keçirir
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac növü
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+Şəbəkədə "Latency" (Gecikmə) anlayışına təsir edən əsas fiziki faktor hansıdır?
+A. Məlumatın ötürüldüyü fiziki məsafə və şəbəkə avadanlıqlarının emal sürəti
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan zaman
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik vaxt
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik proses
+ANSWER: A
+
+"NAT Gateway" (Network Address Translation) xidməti nə üçün istifadə olunur?
+A. Özəl alt şəbəkədəki resursların internetə çıxışını təmin etmək, lakin xaricdən girişi bağlamaq
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətmək üçün
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi üçün
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi üçün
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi üçün
+ANSWER: A
+
+"Content Delivery Network" (CDN) şəbəkə arxitekturasında hansı üstünlüyü verir?
+A. Statik məzmunu istifadəçilərə coğrafi cəhətdən ən yaxın serverlərdən sürətlə çatdırır
+B. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi kimi
+C. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün olan alət
+D. Klaviatura və siçan vasitəsilə bir neçə monitoru eyni vaxtda idarə edən mexanizm
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: A
+
+Buludda "Route Table" (Marşrutlaşdırma cədvəli) hansı məlumatları özündə saxlayır?
+A. Şəbəkə trafikinin hansı istiqamətə (şlüzə və ya interfeysə) yönləndirilməsi barədə qaydaları
+B. Fiziki avadanlığın birbaşa icarəyə verilməsi barədə olan köhnə IaaS modelində istifadə
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühitində tətbiq
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki bir proqram
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qurğusu
+ANSWER: A
+
+"VPN Gateway" xidməti bulud arxitekturasında nəyi təmin edir?
+A. Yerli ofis şəbəkəsi ilə bulud şəbəkəsi arasında şiffrələnmiş təhlükəsiz bağlantını
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+Şəbəkədə "Bandwidth" (Ötürmə zolağı) anlayışı nəyi ifadə edir?
+A. Vahid zaman ərzində şəbəkə xətti ilə ötürülə bilən maksimum məlumat həcmini
+B. Serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçən yeganə cihaz
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artıran daxili kod
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram təminatı
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Buludda "Elastic IP" (və ya Reserved IP) anlayışı nə üçün vacibdir?
+A. Virtual maşın söndürülüb yenidən açıldıqda belə onun IP ünvanının dəyişməməsi üçün
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikmənin ölçülməsi
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatının tətbiqi
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsinin icrası
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesi
+ANSWER: A
+
+"Direct Connect" (və ya ExpressRoute) xidmətinin ənənəvi VPN-dən fərqi nədir?
+A. İnternet üzərindən deyil, provayderlə müştəri arasında ayrılmış fiziki və xüsusi xətt olması
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün əlverişli
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemi növü
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi işi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Sosinsky-ə görə "Application Load Balancer" (ALB) hansı səviyyədə işləyir?
+A. OSI modelinin 7-ci (Tətbiq) səviyyəsində, HTTP/HTTPS trafikini analiz edərək
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram üçün
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün
+ANSWER: A
+
+Şəbəkədə "VPC Peering" nə üçün istifadə olunur?
+A. İki fərqli VPC-ni sanki eyni şəbəkədəymiş kimi bir-birinə birbaşa bağlamaq üçün
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+"Firewall rules" təyin edilərkən "Deny all" prinsipi nəyi ifadə edir?
+A. İcazə verilməyən bütün digər trafikin avtomatik olaraq bloklanması (təhlükəsizlik üçün)
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə verilməsi
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmaq işi
+ANSWER: A
+
+DNS-də "A Record" nəyi bildirir?
+A. Domen adını birbaşa olaraq konkret bir IPv4 ünvanına bağlayan əsas qeyd növü
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac növü
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+Bulud şəbəkəsində "Inbound" və "Outbound" trafik nə deməkdir?
+A. Inbound şəbəkəyə daxil olan, Outbound isə şəbəkədən kənara çıxan məlumat axınıdır
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan proses
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik vaxt
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik proses
+ANSWER: A
+
+"IP Spoofing" hücumunun qarşısını almaq üçün şəbəkədə hansı tədbir görülür?
+A. Gələn paketlərin mənbə IP ünvanlarının həqiqiliyini yoxlayan firewall filtrasiyası
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətmək işi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi üçün
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi üçün
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi üçün
+ANSWER: A
+
+Bulud təhlükəsizliyində "CIA" modelinin (Triada) əsas komponentləri hansılardır?
+A. Kompüterlərin daxili hissələrini proqram vasitəsilə təmizləməyi təmin edən texnika növü
+B. Məxfiliyin qorunması, məlumat bütövlüyü və resursların hər an əlçatan olması prinsipi
+C. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlandığı kiçik və qapalı otaq
+D. Serverlərin yerləşdiyi otağın divarlarının rənginə görə ayrılmış daxili texniki zona
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili rəqəmsal soyutma qatı
+ANSWER: B
+
+"Integrity" (Bütövlük) prinsipi buludda məlumatların hansı xüsusiyyətini təmin edir?
+A. Məlumatların icazəsiz şəxslər tərəfindən dəyişdirilməsinin qarşısının alınmasını
+B. Şirkət rəhbərliyinin hər gün serverləri əllə təmizləməsi barədə olan daxili əmri
+C. İnternet sürətinin yalnız mühəndislər tərəfindən səsli komanda ilə artırılması işi
+D. Serverlərin yerləşdiyi binaların hər ay başqa bir şəhərə köçürülməsi üçün olan plan
+E. Proqram təminatının interfeysindəki düymələrin sayını proqram vasitəsilə azaltmaq
+ANSWER: A
+
+"IAM" (Identity and Access Management) konsepsiyasının təməl məqsədi nədir?
+A. Doğru şəxslərin doğru resurslara lazımi səviyyədə və təhlükəsiz girişini təmin etmək
+B. Private IP ünvanları yalnız peyk vasitəsilə işləyir, Public IP isə yalnız kabellə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi qaydası
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili rəqəmsal sayğac
+ANSWER: A
+
+Buludda "Multi-Factor Authentication" (MFA) istifadəsi nə dərəcədə əhəmiyyətlidir?
+A. Giriş zamanı birdən çox təsdiqləmə üsulu tələb edərək təhlükəsizlik səviyyəsini artırır
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+"Asymmetric Encryption" (Asimmetrik şifrələmə) metodunda hansı açarlardan istifadə olunur?
+A. Hər kəsə açıq olan "Public Key" və yalnız sahibində qalan gizli "Private Key" açarları
+B. Serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçən rəqəmsal cihaz
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artıran proqram kodu
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram təminatı
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Erl-ə görə buludda "Risk Assessment" (Riskin qiymətləndirilməsi) prosesi nəyi əhatə edir?
+A. Potensial təhlükələrin aşkar edilməsi və onların sistemə vura biləcəyi zərərin ölçülməsi
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikmənin ölçülməsi
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatının tətbiqi
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsinin icrası
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesi
+ANSWER: A
+
+"Denial of Service" (DoS) hücumunun bulud infrastrukturu üçün əsas təhlükəsi nədir?
+A. Resursları həddindən artıq yükləyərək xidmətin qanuni istifadəçilər üçün əlçatmaz olması
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün təhlükə
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemidir
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+"Encryption in Transit" (Ötürülmə zamanı şifrələmə) hansı vəziyyəti təsvir edir?
+A. Məlumatların şəbəkə vasitəsilə bir nöqtədən digərinə hərəkət edərkən şiffrələnmiş olması
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün olan proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün alət
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram növü
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün vasitə
+ANSWER: A
+
+"Insider Threat" (Daxili təhlükə) anlayışı Erl-ə görə kimləri əhatə edir?
+A. Təşkilatın daxilində olan və resurslara girişi olan işçilərin qərəzli və ya səhv hərəkətlərini
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+Buludda "Least Privilege" (Minimum üstünlük) prinsipi nəyi tələb edir?
+A. İstifadəçiyə yalnız öz işini yerinə yetirmək üçün lazım olan minimum icazələrin verilməsini
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə verilməsi
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmaq işi
+ANSWER: A
+
+"Phishing" hücumu vasitəsilə hakerlər əsasən nəyi əldə etməyə çalışırlar?
+A. Saxta mesajlar və saytlar vasitəsilə istifadəçilərin giriş məlumatlarını və şifrələrini
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac növü
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+"Symmetric Encryption" (Simmetrik şifrələmə) metodunun əsas xüsusiyyəti nədir?
+A. Şifrələmə və şifrənin açılması üçün eyni bir gizli açardan istifadə olunması
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan proses
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik vaxt
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik proses
+ANSWER: A
+
+"Man-in-the-Middle" (MitM) hücumu zamanı haker hansı hərəkəti həyata keçirir?
+A. İki tərəf arasındakı rabitəyə gizlicə daxil olaraq məlumatları dinləyir və ya dəyişdirir
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətmək üçün
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi üçün
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi üçün
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi üçün
+ANSWER: A
+
+Buludda "Risk Mitigation" (Riskin azaldılması) strategiyası nəyi nəzərdə tutur?
+A. Təhlükəsizlik nəzarətləri tətbiq etməklə riskin baş vermə ehtimalını və ya təsirini azaltmağı
+B. Serverlərin daxili hissələrinin tozlanmasının qarşısını alan virtual filtr sistemi kimi
+C. İnternetə qoşulan zaman hər dəfə mürəkkəb riyazi məsələlərin həlli üçün olan alət
+D. Klaviatura və siçan vasitəsilə bir neçə monitoru eyni vaxtda idarə edən mexanizm
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma aləti
+ANSWER: A
+
+"SQL Injection" hücumu hansı növ bulud resursları üçün daha böyük təhlükə yaradır?
+A. Veb tətbiqləri və onlara bağlı olan verilənlər bazaları daxilindəki məlumatlar üçün
+B. Fiziki avadanlığın birbaşa icarəyə verilməsi barədə olan köhnə IaaS modelində istifadə
+C. Yalnız mobil oyunların hazırlanması üçün istifadə olunan daxili əyləncə mühitində tətbiq
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki bir proqram
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qurğusu
+ANSWER: A
+
+"Data Loss Prevention" (DLP) texnologiyasının buludda əsas vəzifəsi nədir?
+A. Həssas məlumatların icazəsiz şəkildə təşkilatdan kənara sızmasının qarşısını almaq
+B. Maşın söndürüldüyü an bütün dünyadakı internet sürəti avtomatik olaraq aşağı düşür
+C. Serverlərin daxili hissələri maşın dayandırılan zaman mütləq mühəndis tərəfindən təmizlənir
+D. Virtual maşın dayanan kimi onun içindəki bütün fayllar dərhal və geri dönməz silinir
+E. Prosessorun temperaturu maşın dayandırılan zaman süni şəkildə mütləq şəkildə artırılır
+ANSWER: A
+
+"Privileged Access Management" (PAM) sistemləri kimlərin girişinə nəzarət edir?
+A. Sistem inzibatçıları kimi yüksək səviyyəli icazələrə malik olan istifadəçilərin girişinə
+B. Serverlərin çəkisini ümumi tonla ifadə edən fiziki göstəricini ölçən yeganə cihaz
+C. İnternet provayderinin müştəriyə verdiyi endirim kuponlarının sayını artıran daxili kod
+D. Server otağındakı mühəndislərin geyim formasına nəzarət edən mərkəzi proqram təminatı
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+Buludda "Zero Trust" təhlükəsizlik modelinin əsas şüarı nədir?
+A. "Heç vaxt etibar etmə, həmişə yoxla" prinsipi ilə hər bir girişi ciddi sınaqdan keçirmək
+B. Şəbəkə kabellərinin bir-birinə dolaşması nəticəsində yaranan texniki gecikmənin ölçülməsi
+C. İşçilərin işə gəlmə vaxtını saniyələr daxilində ölçən mərkəzi nəzarət saatının tətbiqi
+D. İnternet provayderinin aylıq faturanı müştəriyə daha tez göndərməsi vəzifəsinin icrası
+E. Kompüterin monitorunun rənginin xəta zamanı dərhal yaşıl rəngə çevrilməsi prosesi
+ANSWER: A
+
+"Vulnerability Scanning" (Zəifliklərin skan edilməsi) prosesi nə üçün icra olunur?
+A. Sistemdəki texniki boşluqları və təhlükəsizlik zəifliklərini vaxtında aşkar etmək üçün
+B. Məlumatların yalnız peyk rabitəsi vasitəsilə uzaq kosmosda saxlanılması işi üçün əlverişli
+C. İnternetə qoşulan cihazların markasını hər saniyə dəyişən mürəkkəb alqoritm sistemi növü
+D. Server otağındakı mühəndislərin xüsusi rəqəmsal saatlar vasitəsilə mərkəzi idarəsi işi
+E. Şəbəkə kabellərinin uzunluğunu sm-lə ölçən və bazada qeyd edən texniki sənəd növü
+ANSWER: A
+
+IAM sistemlərində "Role-Based Access Control" (RBAC) nəyi ifadə edir?
+A. İcazələrin fərdi şəxslərə deyil, onların təşkilatdakı vəzifələrinə (rollarına) verilməsini
+B. İstifadəçi şifrələrini hər gün sistem tərəfindən avtomatik dəyişdirmək üçün proqram
+C. İnternet paketlərinin bitməsi barədə istifadəçiyə zəng edib məlumat vermək işi üçün
+D. Serverlərin daxili hissələrini kəlbətin vasitəsilə tənzimləyən mexaniki proqram üçün
+E. Proqram təminatının daxili kodlarını hər bir müştəri üçün fərdi dildə yazmaq üçün
+ANSWER: A
+
+Buludda "Risk Transfer" (Riskin ötürülməsi) strategiyasına ən yaxşı nümunə hansıdır?
+A. Bulud infrastrukturunun risklərini sığortalamaq və ya müəyyən öhdəliyi provayderə vermək
+B. Zonal resurslar yalnız peyk vasitəsilə işləyir, regional resurslar isə kabel vasitəsilə
+C. İnternet provayderinə ödənilən aylıq vəsaitin gecikdirilməsi barədə səsli xəbərdarlıq
+D. Şəbəkə kabellərinin mütləq şəkildə rezin materialdan hazırlanması və rənglənməsi işi
+E. Prosessorun temperaturunu tənzimləmək üçün istifadə olunan daxili soyutma qatı işi
+ANSWER: A
+
+"Brute Force" hücumu zamanı haker hansı metodu tətbiq edir?
+A. Mümkün olan bütün şifrə kombinasiyalarını ardıcıl yoxlayaraq hesaba daxil olmağa çalışır
+B. Məlumatların yalnız kağız üzərində çap edilərək qovluqlarda saxlanılması qaydası
+C. İnternet sürətinin proqram vasitəsilə yalnız bir nəfər üçün artırılmasına icazə verilməsi
+D. Serverlərin yerləşdiyi binanın dəqiq xəritəsini internetdə hər kəsə nümayiş etdirmək
+E. Proqram təminatının interfeysindəki düymələrin sayını avtomatik olaraq azaltmaq işi
+ANSWER: A
+
+"Encryption at Rest" (Saxlanılan vəziyyətdə şifrələmə) nəyi qoruyur?
+A. Disklərdə və ya arxivlərdə saxlanılan məlumatların fiziki oğurluq və ya icazəsiz girişdən müdafiəsini
+B. Şəbəkəyə qoşulan cihazların markasına görə yeni lisenziyaları avtomatik almaq üçün alət
+C. İnternet sürətinin saniyə daxilində dəyişməsini qeydə alan daxili rəqəmsal sayğac növü
+D. Prosessorun nüvələrinin sayını proqram vasitəsilə süni şəkildə gizlətmək işi üçün vəzifə
+E. Server otağındakı işıqların rəngini maşının söndüyünü bildirmək üçün dəyişmək qaydası
+ANSWER: A
+
+Buludda "Security Group" və "Network ACL" arasındakı fərq nədən ibarətdir?
+A. Security Group dövlətli (stateful) fəaliyyət göstərir, Network ACL isə dövlətsiz (stateless) filtrdir
+B. Bütün il ərzində heç bir saniyə belə kəsinti yaşaması qətiyyən mümkün olmayan proses
+C. İnternet provayderinin istədiyi zaman sistemi söndürmə hüququ olduğu kiçik müddət
+D. Serverlərin yerləşdiyi otağın divarları rənglənən zaman keçən bir neçə həftəlik vaxt
+E. Kompüter monitorlarının parlaqlığını tənzimləmək üçün lazım olan beş dəqiqəlik proses
+ANSWER: A
+
+"Compliance" (Uyğunluq) anlayışı bulud təhlükəsizliyində nəyi tələb edir?
+A. Sistemlərin müəyyən edilmiş hüquqi standartlara və sənaye normalarına (məs. ISO 27001) uyğunluğunu
+B. Ofis daxilindəki kompüterlərin sayını proqram vasitəsilə süni şəkildə gizlətmək işi
+C. İnternet provayderinə ödənilən aylıq vəsaitin mütləq şəkildə sıfıra endirilməsi üçün
+D. Serverlərin yerləşdiyi otağın divar kağızlarının dizaynını mütəmadi dəyişmək işi üçün
+E. Prosessorun daxili tezliyini yalnız proqramçılar üçün maksimuma qaldırmaq işi üçün
+ANSWER: A
+    `;
+
+    // --- SİSTEMİN MƏNTİQİ ---
+    let masterQuestions = [];
     let examQuestions = [], answers = {}, currentIndex = 0, skipsLeft = 5, timerInterval, timeLeft = 300;
 
+    // Aiken mətni obyektə çevirən funksiya
+    function parseAiken(text) {
+        const blocks = text.trim().split(/\n\s*\n/);
+        return blocks.map(block => {
+            const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (lines.length < 3) return null;
+            const qText = lines[0];
+            const ansLine = lines.find(l => l.toUpperCase().startsWith("ANSWER:"));
+            if (!ansLine) return null;
+            const correctLetter = ansLine.split(":")[1].trim().toUpperCase();
+            const options = lines.filter(l => /^[A-E]\./.test(l)).map(l => ({
+                text: l.substring(2).trim(),
+                isCorrect: l[0].toUpperCase() === correctLetter
+            }));
+            return { qText, options };
+        }).filter(q => q !== null);
+    }
+
+    // Səhifə açılan kimi Aiken suallarını analiz et
+    function initSystem() {
+        masterQuestions = parseAiken(AIKEN_DATA);
+        console.log("Sistem hazır. Yüklənən sual sayı: " + masterQuestions.length);
+        loadLeaderboard();
+    }
+
     function saveScore(name, score) {
-        // 1. Yerli yaddaşa yazır (Leaderboard üçün)
+        // Yerli yaddaş
         let lb = JSON.parse(localStorage.getItem('exam_lb') || "[]");
         lb.push({ name, score });
         lb.sort((a, b) => b.score - a.score);
         localStorage.setItem('exam_lb', JSON.stringify(lb.slice(0, 15)));
 
-        // 2. SERVERƏ (Google Sheets) GÖNDƏRİR
+        // Google Sheets
         if(SCRIPT_URL && SCRIPT_URL !== 'BURAYA_KOPYALADIGINIZ_URL_YAZIN') {
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                cache: 'no-cache',
                 body: JSON.stringify({ name: name, score: score })
-            }).then(() => console.log("Məlumat Google Sheets-ə göndərildi."));
+            });
         }
     }
 
-    // --- DİGƏR FUNKSİYALAR (Dəyişməyib) ---
-    function toggleAdmin() { document.getElementById('admin-zone').style.display = (document.getElementById('admin-zone').style.display==='none'?'block':'none'); }
-    function clearLeaderboard() { if(confirm("Cədvəl silinsin?")){ localStorage.removeItem('exam_lb'); loadLeaderboard(); } }
-    
-    function uploadQuestions() {
-        const file = document.getElementById('fileInput').files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const blocks = e.target.result.trim().split(/\n\s*\n/);
-            const parsed = blocks.map(block => {
-                const lines = block.split('\n').map(l => l.trim());
-                const qText = lines[0];
-                const ansLine = lines.find(l => l.toUpperCase().startsWith("ANSWER:"));
-                const correctLetter = ansLine.split(":")[1].trim().toUpperCase();
-                const options = lines.filter(l => /^[A-E]\./.test(l)).map(l => ({
-                    text: l.substring(2).trim(),
-                    isCorrect: l[0].toUpperCase() === correctLetter
-                }));
-                return { qText, options };
-            });
-            localStorage.setItem('master_questions', JSON.stringify(parsed));
-            alert("Suallar yükləndi!"); location.reload();
-        };
-        reader.readAsText(file);
-    }
-
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            const min = Math.floor(timeLeft/60), sec = timeLeft%60;
-            const display = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-            document.getElementById('timer-box').innerText = display;
-            if(timeLeft <= 30) document.getElementById('timer-box').classList.add('timer-warning');
-            if(timeLeft <= 0) { clearInterval(timerInterval); confirmFinish(true); }
-        }, 1000);
-    }
-
+    // İmtahanı başlat
     function startExam() {
         const name = document.getElementById('username').value.trim();
-        if(!name || masterQuestions.length < 20) return alert("Ad yazın və ya bazada kifayət qədər sual olduğundan əmin olun!");
+        if(!name) return alert("Adınızı yazın!");
+        if(masterQuestions.length < 20) return alert("Bazadakı sual sayı kifayət deyil (Min. 20)!");
+
         document.getElementById('s-name').innerText = name;
         examQuestions = [...masterQuestions].sort(() => Math.random() - 0.5).slice(0, 20);
         examQuestions.forEach(q => q.options.sort(() => Math.random() - 0.5));
-        startTimer(); showScreen('quiz-screen'); renderExam();
+        
+        timeLeft = 300;
+        startTimer();
+        showScreen('quiz-screen');
+        renderExam();
     }
 
-    function renderExam() {
-        const q = examQuestions[currentIndex];
-        document.getElementById('q-text').innerText = (currentIndex + 1) + ". " + q.qText;
-        const box = document.getElementById('options-box'); box.innerHTML = "";
-        q.options.forEach(opt => {
-            const div = document.createElement('div');
-            div.className = 'option' + (answers[currentIndex] === opt.text ? ' selected' : '');
-            div.innerText = opt.text;
-            div.onclick = () => { answers[currentIndex] = opt.text; updateUI(); renderExam(); };
-            box.appendChild(div);
-        });
-        updateUI();
-    }
+    // ... (Dəyişməyən digər funksiyalar: renderExam, updateUI, nextQ, prevQ, swapQuestion, confirmFinish) ...
+    // Qeyd: Əvvəlki kodunuzdakı vizual hissələri (render və s.) olduğu kimi saxlayın.
 
-    function updateUI() {
-        const nav = document.getElementById('navPanel'); nav.innerHTML = "";
-        for(let i=0; i<20; i++) {
-            const div = document.createElement('div');
-            div.className = 'nav-item' + (currentIndex === i ? ' active' : '') + (answers[i] ? ' answered' : '');
-            div.innerText = i + 1;
-            div.onclick = () => { currentIndex = i; renderExam(); };
-            nav.appendChild(div);
-        }
-        document.getElementById('s-progress').innerText = `${Object.keys(answers).length}/20`;
-        document.getElementById('s-skips').innerText = skipsLeft;
-    }
-
-    function swapQuestion() {
-        if(skipsLeft > 0) {
-            const used = examQuestions.map(q => q.qText);
-            const avail = masterQuestions.filter(q => !used.includes(q.qText));
-            if(avail.length > 0) {
-                examQuestions[currentIndex] = avail[Math.floor(Math.random()*avail.length)];
-                examQuestions[currentIndex].options.sort(() => Math.random() - 0.5);
-                delete answers[currentIndex]; skipsLeft--; renderExam();
-            }
-        }
-    }
-
-    function nextQ() { if(currentIndex < 19) { currentIndex++; renderExam(); } }
-    function prevQ() { if(currentIndex > 0) { currentIndex--; renderExam(); } }
-
-    function confirmFinish(auto = false) {
-        if(!auto && !confirm("İmtahanı bitirirsiniz?")) return;
-        clearInterval(timerInterval);
-        let score = 0;
-        examQuestions.forEach((q, i) => { if(answers[i] === q.options.find(o => o.isCorrect).text) score += 0.5; });
-        saveScore(document.getElementById('s-name').innerText, score);
-        alert("Bitdi! Balınız: " + score); location.reload();
-    }
-
-    function loadLeaderboard() {
-        const lb = JSON.parse(localStorage.getItem('exam_lb') || "[]");
-        document.getElementById('leaderboardBody').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.score}</td></tr>`).join('') || '<tr><td colspan="2">Nəticə yoxdur</td></tr>';
-    }
-
-    function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    loadLeaderboard();
+    window.onload = initSystem;
 </script>
 
 </body>
